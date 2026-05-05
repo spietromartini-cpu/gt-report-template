@@ -1,24 +1,23 @@
-#!/usr/bin/env python3
-"""
-GT Global Estates & Capital — Investment Report Generator (v2)
-Generates institutional-grade PDF investment reports.
-Updated to match all form fields from sovereign_build website.
-
-Placeholders map directly to Make.com webhook payload fields.
-"""
-
 import os
 import sys
 import re
+import io
 from datetime import datetime
 from pathlib import Path
 
+from flask import Flask, request, send_file, jsonify
+
 try:
-    from weasyprint import HTML, CSS
+    from weasyprint import HTML
 except ImportError:
     print("WeasyPrint not installed. Run: pip install weasyprint")
     sys.exit(1)
 
+
+app = Flask(__name__)
+
+# Der API-Key Türsteher (Render holt sich den Key aus den Environment Variables)
+API_KEY = os.environ.get("API_KEY") 
 
 class InvestmentReportGenerator:
     """
@@ -37,24 +36,21 @@ class InvestmentReportGenerator:
         except FileNotFoundError:
             raise FileNotFoundError(f"Template not found: {self.template_path}")
 
-    def generate(self, data: dict, output_path: str) -> bool:
-        try:
-            html_content = self.template_content
-            for key, value in data.items():
-                placeholder = "{{" + key + "}}"
-                html_content = html_content.replace(placeholder, str(value))
+    # NEU: Diese Methode druckt das PDF direkt in den Arbeitsspeicher für Make.com
+    def generate_pdf_bytes(self, data: dict) -> io.BytesIO:
+        html_content = self.template_content
+        for key, value in data.items():
+            placeholder = "{{" + key + "}}"
+            html_content = html_content.replace(placeholder, str(value))
 
-            remaining = re.findall(r'\{\{(\w+)\}\}', html_content)
-            if remaining:
-                print(f"Warning — unreplaced placeholders: {remaining}")
+        remaining = re.findall(r'\{\{(\w+)\}\}', html_content)
+        if remaining:
+            print(f"Warning — unreplaced placeholders: {remaining}")
 
-            HTML(string=html_content).write_pdf(output_path)
-            print(f"PDF generated: {output_path}")
-            return True
-
-        except Exception as e:
-            print(f"Error: {str(e)}")
-            return False
+        pdf_buffer = io.BytesIO()
+        HTML(string=html_content).write_pdf(pdf_buffer)
+        pdf_buffer.seek(0)
+        return pdf_buffer
 
     @staticmethod
     def compute_derived_fields(data: dict) -> dict:
@@ -163,111 +159,54 @@ class InvestmentReportGenerator:
 
         return data
 
-    @staticmethod
-    def get_sample_data() -> dict:
-        """Sample data for testing — mirrors website form fields."""
-        today = datetime.now().strftime("%d.%m.%Y")
-        return {
-            # ── From website form ──────────────────────────────────
-            "name":               "Pietro Martini",
-            "email":              "pietro@gtglobal.com",
-            "investorProfile":    "institutional",
-            "strategy":           "rent",
-            "city":               "Bucharest",
-            "country":            "Romania",
-            "district":           "Floreasca",
-            "address":            "Calea Floreasca 88",
-            "assetType":          "Historic Residential — Art Nouveau Villa",
-            "price":              465000,
-            "area":               280,
-            "monthlyRent":        2650,
-            "interestRate":       4.2,
-            "loanYears":          20,
-            "equity":             120000,
-            "ancillaryCosts":     32000,
-            "vacancyRate":        5,
-            "managementCost":     220,
-            "maintenanceReserve": 150,
-            "taxResidency":       "Romania (Non-Resident)",
-            "seismic":            "RS III",
-            "legal":              "Active Restitution Proceeding",
-            # GRI
-            "griConflict":        3.2,
-            "griFiscal":          4.1,
-            "griExit":            3.5,
-            "griComposite":       3.6,
-            "grAdjPct":           9.0,
 
-            # ── Computed / AI-generated ────────────────────────────
-            "date":               today,
-            "property_name":      "Bucharest — Floreasca Art Nouveau Villa",
-            "segment":            "Luxury Real Estate",
-            "tri_score":          "5.8",
-            "tri_score_pct":      58,
+# --- SERVER SETUP ---
+base_dir = Path(__file__).parent
+template_path = str(base_dir / "investment_report_en.html")
 
-            # Veto checks
-            "seismic_veto_class":      "ok",
-            "seismic_veto":            "✓ PASS",
-            "court_veto_class":        "alert",
-            "court_veto":              "⚠ ACTIVE",
-            "registration_veto_class": "ok",
-            "registration_veto":       "✓ PASS",
-            "ownership_veto_class":    "alert",
-            "ownership_veto":          "⚠ UNRESOLVED",
-
-            # Market & Analysis
-            "macro_analysis":     "Romania's economy demonstrates robust growth with average GDP expansion of 4.2% over five years. EU membership since 2007 provides legal certainty and capital flow freedoms. Bucharest continues to attract institutional investors as an emerging technology hub.",
-            "ownership_layers":   "The Art Nouveau villa in Floreasca carries ownership complexity rooted in 1944. A restitution proceeding initiated in 2003 remains active and directly affects title. This constitutes a binary veto criterion for retail investors but a manageable risk for institutional capital.",
-            "gdp_growth":         "+4.2% p.a.",
-            "unemployment":       "5.1%",
-            "vacancy_rate":       "3.8%",
-            "price_appreciation": "+8.5% p.a.",
-            "rent_gap_analysis":  "The rent-gap between current market price (€465,000) and potential ARV post title normalization (€650,000) represents €185,000 in unrealized value — realizable exclusively by institutional investors with 10+ year horizons.",
-
-            # SR-IIT
-            "tri_veto_logic":     "The TRI-Veto System distinguishes gradual risks (incorporated into TRI calculation) from binary risks (which halt the formula entirely). The active restitution proceeding is a binary knockout for retail investors. For institutional investors, it is priced into the Juridical Premium (JP) component of the MAO calculation.",
-            "sr_iit_formula":     "V* = V_phys + V_econ + V_soz(s) + IA − TRI_adj − GR_adj. V_phys derives from Vitruvius' Triad (Firmness, Utility, Beauty); V_econ from discounted cash flow analysis; V_soz from spatial theory and cultural capital; IA from information asymmetry premiums; TRI_adj from title risks; GR_adj from geopolitical considerations.",
-            "tr_retail":          "25%",
-            "tr_institutional":   "15%",
-            "mao_retail":         "€ 220,000",
-            "mao_institutional":  "€ 380,000",
-
-            # Financial
-            "usable_area":        "280 m²",
-            "year_built":         "1912",
-            "energy_rating":      "D",
-            "condition":          "Requires Renovation",
-            "net_yield":          "4.2%",
-            "cap_rate":           "5.1%",
-            "coc_return":         "18.5%",
-            "irr_projection":     "12.3%",
-            "junkspace_analysis": "This Art Nouveau villa embodies the antithesis of Junkspace — it carries the Rossi Density of Memory intrinsic to its neighborhood. Unlike peripheral new construction in Cluj, whose value drivers are market momentum and thus vulnerable during corrections, this villa is substance-anchored.",
-            "recommendation":     "For Institutional Investors: CONDITIONAL BUY. The rent-gap is realizable; the IRR projection is compelling. Recommended MAO: €380,000. For Retail Investors: VETO. The active restitution proceeding is a hard knockout criterion. The asking price of €465,000 represents a 111% premium over the appropriate MAO of €220,000.",
-
-            # Narrative (generated by Gemini AI)
-            "narrative_text":     "Als Gründer von GT Global Estates betrachte ich das Asset in Floreasca durch die Linse purer Marktrealität. Die chirurgische Dekonstruktion der Fundamentaldaten liefert ein messerscharfes Bild: Mit einem TRI-Score von 5.8 positioniert sich das Objekt in einer sehr spezifischen Marktdynamik. Für institutionelle Portfolios gilt absolute Pragmatik — die Korrelation aus Ticketgröße und TRI-Rating verlangt kompromisslose Cashflow-Modellierung. Emotionen verbrennen Rendite. Daten generieren sie.\n\nFazit: Die Metriken sprechen für sich. Die Entscheidung ist nun eine Frage der disziplinierten Kapitalallokation.",
-        }
-
-
-def main():
-    base_dir = Path(__file__).parent
-    template_path = str(base_dir / "investment_report_en.html")
-    output_path   = str(base_dir / "Investment_Report_Sample.pdf")
-
+try:
     generator = InvestmentReportGenerator(template_path)
+except Exception as e:
+    print(f"Critical Error: Could not load template. {e}")
+    generator = None
 
-    raw_data   = generator.get_sample_data()
-    final_data = InvestmentReportGenerator.compute_derived_fields(raw_data)
+# --- API ENDPOINTS ---
 
-    success = generator.generate(final_data, output_path)
+# 1. Health-Check (Damit du im Browser sehen kannst, ob der Server läuft)
+@app.route('/', methods=['GET'])
+def health_check():
+    return "GT PDF Server is LIVE and ready to accept requests from Make.com!"
 
-    if success:
-        size_kb = os.path.getsize(output_path) / 1024
-        print(f"Report created: {output_path}  ({size_kb:.1f} KB)")
-    else:
-        print("PDF generation failed.")
-        sys.exit(1)
+# 2. Die Haupt-URL für Make.com
+@app.route('/generate-pdf', methods=['POST'])
+def generate_pdf_endpoint():
+    # Security: Überprüfe den API Key
+    req_key = request.headers.get("x-api-key")
+    if API_KEY and req_key != API_KEY:
+        return jsonify({"error": "Unauthorized. Invalid or missing API Key."}), 401
+
+    if not generator:
+        return jsonify({"error": "Template file missing on server."}), 500
+
+    try:
+        # Daten von Make.com empfangen
+        raw_data = request.json or {}
+        
+        # Deine Berechnungen durchführen
+        final_data = InvestmentReportGenerator.compute_derived_fields(raw_data)
+        
+        # PDF generieren
+        pdf_file = generator.generate_pdf_bytes(final_data)
+        
+        # PDF direkt als Datei-Download zurückschicken
+        return send_file(
+            pdf_file,
+            download_name="GT_Investment_Report.pdf",
+            mimetype='application/pdf'
+        )
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
-    main()
+    app.run(host='0.0.0.0', port=5000)
