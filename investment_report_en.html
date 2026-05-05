@@ -343,7 +343,7 @@
     height: 100%;
     background: linear-gradient(90deg, var(--gold), var(--gold-lt));
     border-radius: 2px;
-    width: {{tri_score_pct}}%;
+    width: [[tri_score_pct]]%;
   }
   .score-labels {
     display: flex;
@@ -600,13 +600,13 @@
     <div class="cover-sub">S T R A T E G I C &nbsp; R E A L &nbsp; E S T A T E &nbsp; I N T E L L I G E N C E</div>
     <div class="cover-line"></div>
     <h2 style="font-family:var(--fh);font-size:28pt;font-weight:300;color:var(--cream);line-height:1.1;margin-bottom:20px;">
-      {{property_name}}
+      [[property_name]]
     </h2>
     <div style="font-family:var(--fb);font-size:8pt;font-weight:300;color:rgba(245,245,240,.5);letter-spacing:.06em;margin-bottom:40px;">
       Investment Analysis &amp; Valuation Report
     </div>
     <div class="cover-for">Prepared Exclusively For</div>
-    <div class="cover-client">{{client_name}}</div>
+    <div class="cover-client">[[client_name]]</div>
   </div>
 
   <div class="cover-strip">
@@ -620,14 +620,14 @@
     </div>
     <div class="cs-item" style="text-align:right;">
       <span class="cs-label">Date</span>
-      <span class="cs-val" style="font-size:9pt;color:var(--gold);">{{date}}</span>
+      <span class="cs-val" style="font-size:9pt;color:var(--gold);">[[date]]</span>
     </div>
   </div>
 
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span>
     <span>Private &amp; Confidential</span>
-    <span class="ft-date">{{date}}</span>
+    <span class="ft-date">[[date]]</span>
   </div>
 </div>
 
@@ -653,8 +653,8 @@
   <div class="divider"></div>
 
   <!-- Investor Profile -->
-  <div class="profile-badge {{investor_profile_class}}">
-    ◆ &nbsp; {{investor_profile_label}}
+  <div class="profile-badge [[investor_profile_class]]">
+    ◆ &nbsp; [[investor_profile_label]]
   </div>
 
   <!-- KPI Cards -->
@@ -662,19 +662,19 @@
 
     <div class="kpi-card">
       <div class="kpi-label">Acquisition Price</div>
-      <div class="kpi-value">{{price}}</div>
+      <div class="kpi-value">[[price]]</div>
       <div class="kpi-unit">EUR</div>
     </div>
 
     <div class="kpi-card">
       <div class="kpi-label">Gross Yield</div>
-      <div class="kpi-value">{{yield}}</div>
+      <div class="kpi-value">[[yield]]</div>
       <div class="kpi-unit">% p.a.</div>
     </div>
 
     <div class="kpi-card">
       <div class="kpi-label">TRI Score</div>
-      <div class="kpi-value">{{tri_score}}</div>
+      <div class="kpi-value">[[tri_score]]</div>
       <div class="kpi-unit">Rating (0–10)</div>
       <div class="score-bar-wrap">
         <div class="score-bar-track">
@@ -689,7 +689,7 @@
 
     <div class="kpi-card">
       <div class="kpi-label">Seismic Classification</div>
-      <div class="kpi-value" style="font-size:24pt;">{{seismic_class}}</div>
+      <div class="kpi-value" style="font-size:24pt;">[[seismic_class]]</div>
       <div class="kpi-unit">Risk Assessment</div>
     </div>
 
@@ -699,25 +699,25 @@
   <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
     <div style="background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);padding:14px 16px;">
       <div class="col-label">Location</div>
-      <div style="font-family:var(--fh);font-size:10pt;color:var(--cream);">{{city}}</div>
-      <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:3px;">{{country}}</div>
+      <div style="font-family:var(--fh);font-size:10pt;color:var(--cream);">[[city]]</div>
+      <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:3px;">[[country]]</div>
     </div>
     <div style="background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);padding:14px 16px;">
       <div class="col-label">Asset Type</div>
-      <div style="font-family:var(--fh);font-size:10pt;color:var(--cream);">{{asset_type}}</div>
-      <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:3px;">{{segment}}</div>
+      <div style="font-family:var(--fh);font-size:10pt;color:var(--cream);">[[asset_type]]</div>
+      <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:3px;">[[segment]]</div>
     </div>
     <div style="background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);padding:14px 16px;">
       <div class="col-label">Strategy</div>
-      <div style="font-family:var(--fh);font-size:10pt;color:var(--cream);">{{strategy_label}}</div>
-      <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:3px;">{{strategy_sub}}</div>
+      <div style="font-family:var(--fh);font-size:10pt;color:var(--cream);">[[strategy_label]]</div>
+      <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:3px;">[[strategy_sub]]</div>
     </div>
   </div>
 
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span>
     <span>Private &amp; Confidential</span>
-    <span class="ft-date">{{date}}</span>
+    <span class="ft-date">[[date]]</span>
   </div>
 </div>
 
@@ -741,9 +741,9 @@
   </div>
 
   <div class="p3-meta">
-    <span>Location: <span>{{city}}, {{country}}</span></span>
-    <span>Asset Type: <span>{{asset_type}}</span></span>
-    <span>Segment: <span>{{segment}}</span></span>
+    <span>Location: <span>[[city]], [[country]]</span></span>
+    <span>Asset Type: <span>[[asset_type]]</span></span>
+    <span>Segment: <span>[[segment]]</span></span>
   </div>
 
   <div class="divider"></div>
@@ -751,15 +751,15 @@
   <div class="two-col">
     <div>
       <div class="col-label">Macroeconomic Fundamentals</div>
-      <p class="body-text">{{macro_analysis}}</p>
+      <p class="body-text">[[macro_analysis]]</p>
     </div>
     <div>
       <div class="col-label">Market Indicators</div>
       <table class="data-table">
-        <tr><td>GDP Growth (5Y)</td><td>{{gdp_growth}}</td></tr>
-        <tr><td>Unemployment Rate</td><td>{{unemployment}}</td></tr>
-        <tr><td>Vacancy Rate</td><td>{{vacancy_rate}}</td></tr>
-        <tr><td>Price Appreciation (3Y)</td><td>{{price_appreciation}}</td></tr>
+        <tr><td>GDP Growth (5Y)</td><td>[[gdp_growth]]</td></tr>
+        <tr><td>Unemployment Rate</td><td>[[unemployment]]</td></tr>
+        <tr><td>Vacancy Rate</td><td>[[vacancy_rate]]</td></tr>
+        <tr><td>Price Appreciation (3Y)</td><td>[[price_appreciation]]</td></tr>
       </table>
     </div>
   </div>
@@ -769,18 +769,18 @@
   <div class="two-col">
     <div>
       <div class="col-label">Ownership Layers Framework</div>
-      <p class="body-text">{{ownership_layers}}</p>
+      <p class="body-text">[[ownership_layers]]</p>
     </div>
     <div>
       <div class="col-label">Rent-Gap Analysis</div>
-      <p class="body-text">{{rent_gap_analysis}}</p>
+      <p class="body-text">[[rent_gap_analysis]]</p>
     </div>
   </div>
 
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span>
     <span>Private &amp; Confidential</span>
-    <span class="ft-date">{{date}}</span>
+    <span class="ft-date">[[date]]</span>
   </div>
 </div>
 
@@ -809,26 +809,26 @@
 
     <div>
       <div class="col-label">TRI-Veto Logic</div>
-      <p class="body-text">{{tri_veto_logic}}</p>
+      <p class="body-text">[[tri_veto_logic]]</p>
 
       <div style="margin-top:20px;">
         <div class="col-label">Veto-Check: Binary Knockout Criteria</div>
         <div class="veto-grid">
           <div class="veto-row">
             <span class="veto-row-label">Seismic Risk (RS I)</span>
-            <span class="badge badge-{{seismic_veto_class}}">{{seismic_veto}}</span>
+            <span class="badge badge-[[seismic_veto_class]]">[[seismic_veto]]</span>
           </div>
           <div class="veto-row">
             <span class="veto-row-label">Supreme Court Proceedings</span>
-            <span class="badge badge-{{court_veto_class}}">{{court_veto}}</span>
+            <span class="badge badge-[[court_veto_class]]">[[court_veto]]</span>
           </div>
           <div class="veto-row">
             <span class="veto-row-label">Non-Registered Property</span>
-            <span class="badge badge-{{registration_veto_class}}">{{registration_veto}}</span>
+            <span class="badge badge-[[registration_veto_class]]">[[registration_veto]]</span>
           </div>
           <div class="veto-row">
             <span class="veto-row-label">Ownership Claims</span>
-            <span class="badge badge-{{ownership_veto_class}}">{{ownership_veto}}</span>
+            <span class="badge badge-[[ownership_veto_class]]">[[ownership_veto]]</span>
           </div>
         </div>
       </div>
@@ -839,49 +839,49 @@
         <div class="gri-bars">
           <div class="gri-bar-row">
             <span class="gri-bar-label">Conflict Risk</span>
-            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:{{gri_conflict_pct}}%"></div></div>
-            <span class="gri-bar-val">{{gri_conflict}}</span>
+            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:[[gri_conflict_pct]]%"></div></div>
+            <span class="gri-bar-val">[[gri_conflict]]</span>
           </div>
           <div class="gri-bar-row">
             <span class="gri-bar-label">Fiscal Risk</span>
-            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:{{gri_fiscal_pct}}%"></div></div>
-            <span class="gri-bar-val">{{gri_fiscal}}</span>
+            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:[[gri_fiscal_pct]]%"></div></div>
+            <span class="gri-bar-val">[[gri_fiscal]]</span>
           </div>
           <div class="gri-bar-row">
             <span class="gri-bar-label">Exit Risk</span>
-            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:{{gri_exit_pct}}%"></div></div>
-            <span class="gri-bar-val">{{gri_exit}}</span>
+            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:[[gri_exit_pct]]%"></div></div>
+            <span class="gri-bar-val">[[gri_exit]]</span>
           </div>
           <div class="gri-bar-row">
             <span class="gri-bar-label" style="color:var(--gold);font-weight:600;">Composite GRI</span>
-            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:{{gri_composite_pct}}%;background:linear-gradient(90deg,var(--gold),var(--gold-lt))"></div></div>
-            <span class="gri-bar-val" style="color:var(--gold);">{{gri_composite}}</span>
+            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:[[gri_composite_pct]]%;background:linear-gradient(90deg,var(--gold),var(--gold-lt))"></div></div>
+            <span class="gri-bar-val" style="color:var(--gold);">[[gri_composite]]</span>
           </div>
         </div>
         <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:6px;">
-          GR_adj: <span style="color:var(--gold);">{{gr_adj_pct}}%</span> of V_phys
+          GR_adj: <span style="color:var(--gold);">[[gr_adj_pct]]%</span> of V_phys
         </div>
       </div>
     </div>
 
     <div>
       <div class="col-label">SR-IIT Value Formula</div>
-      <p class="body-text">{{sr_iit_formula}}</p>
+      <p class="body-text">[[sr_iit_formula]]</p>
 
       <div style="margin-top:20px;">
         <div class="col-label">Investor Profile &amp; MAO</div>
         <table class="data-table">
-          <tr><td>Target Return (Retail)</td><td>{{tr_retail}}</td></tr>
-          <tr><td>Target Return (Institutional)</td><td>{{tr_institutional}}</td></tr>
-          <tr><td>MAO (Retail)</td><td>{{mao_retail}}</td></tr>
-          <tr><td>MAO (Institutional)</td><td>{{mao_institutional}}</td></tr>
+          <tr><td>Target Return (Retail)</td><td>[[tr_retail]]</td></tr>
+          <tr><td>Target Return (Institutional)</td><td>[[tr_institutional]]</td></tr>
+          <tr><td>MAO (Retail)</td><td>[[mao_retail]]</td></tr>
+          <tr><td>MAO (Institutional)</td><td>[[mao_institutional]]</td></tr>
         </table>
       </div>
 
       <div style="margin-top:20px;">
         <div class="col-label">Tax Residency</div>
         <div style="font-family:var(--fb);font-size:7.5pt;color:var(--cream);padding:8px 12px;background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);">
-          {{tax_residency}}
+          [[tax_residency]]
         </div>
       </div>
     </div>
@@ -891,7 +891,7 @@
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span>
     <span>Private &amp; Confidential</span>
-    <span class="ft-date">{{date}}</span>
+    <span class="ft-date">[[date]]</span>
   </div>
 </div>
 
@@ -914,7 +914,7 @@
     </div>
   </div>
 
-  <div class="strategy-pill">▶ &nbsp; Strategy: {{strategy_label}}</div>
+  <div class="strategy-pill">▶ &nbsp; Strategy: [[strategy_label]]</div>
 
   <div class="divider"></div>
 
@@ -922,29 +922,29 @@
     <div>
       <div class="col-label">Asset Specifications</div>
       <table class="data-table">
-        <tr><td>Usable Area</td><td>{{usable_area}}</td></tr>
-        <tr><td>Year Built</td><td>{{year_built}}</td></tr>
-        <tr><td>Energy Efficiency</td><td>{{energy_rating}}</td></tr>
-        <tr><td>Condition</td><td>{{condition}}</td></tr>
-        <tr><td>District</td><td>{{district}}</td></tr>
-        <tr><td>Full Address</td><td>{{address}}</td></tr>
+        <tr><td>Usable Area</td><td>[[usable_area]]</td></tr>
+        <tr><td>Year Built</td><td>[[year_built]]</td></tr>
+        <tr><td>Energy Efficiency</td><td>[[energy_rating]]</td></tr>
+        <tr><td>Condition</td><td>[[condition]]</td></tr>
+        <tr><td>District</td><td>[[district]]</td></tr>
+        <tr><td>Full Address</td><td>[[address]]</td></tr>
       </table>
     </div>
 
     <div>
       <div class="col-label">Financial Metrics</div>
       <table class="data-table">
-        <tr><td>Acquisition Price</td><td>{{price}}</td></tr>
-        <tr><td>Equity / Own Capital</td><td>{{equity}}</td></tr>
-        <tr><td>Ancillary Costs</td><td>{{ancillary_costs}}</td></tr>
-        <tr><td>Monthly Rent</td><td>{{monthly_rent}}</td></tr>
-        <tr><td>Net Rental Yield</td><td>{{net_yield}}</td></tr>
-        <tr><td>Cap Rate</td><td>{{cap_rate}}</td></tr>
-        <tr><td>CoC Return (5Y)</td><td>{{coc_return}}</td></tr>
-        <tr><td>IRR Projection</td><td>{{irr_projection}}</td></tr>
-        <tr><td>Interest Rate</td><td>{{interest_rate}}</td></tr>
-        <tr><td>Vacancy Rate</td><td>{{vacancy_rate_asset}}</td></tr>
-        <tr><td>Management Cost</td><td>{{management_cost}}</td></tr>
+        <tr><td>Acquisition Price</td><td>[[price]]</td></tr>
+        <tr><td>Equity / Own Capital</td><td>[[equity]]</td></tr>
+        <tr><td>Ancillary Costs</td><td>[[ancillary_costs]]</td></tr>
+        <tr><td>Monthly Rent</td><td>[[monthly_rent]]</td></tr>
+        <tr><td>Net Rental Yield</td><td>[[net_yield]]</td></tr>
+        <tr><td>Cap Rate</td><td>[[cap_rate]]</td></tr>
+        <tr><td>CoC Return (5Y)</td><td>[[coc_return]]</td></tr>
+        <tr><td>IRR Projection</td><td>[[irr_projection]]</td></tr>
+        <tr><td>Interest Rate</td><td>[[interest_rate]]</td></tr>
+        <tr><td>Vacancy Rate</td><td>[[vacancy_rate_asset]]</td></tr>
+        <tr><td>Management Cost</td><td>[[management_cost]]</td></tr>
       </table>
     </div>
   </div>
@@ -953,18 +953,18 @@
 
   <div>
     <div class="col-label">Junkspace Obsolescence Assessment</div>
-    <p class="body-text">{{junkspace_analysis}}</p>
+    <p class="body-text">[[junkspace_analysis]]</p>
   </div>
 
   <div class="recommendation-box">
     <div class="rec-title">Investment Recommendation</div>
-    <div class="rec-body">{{recommendation}}</div>
+    <div class="rec-body">[[recommendation]]</div>
   </div>
 
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span>
     <span>Private &amp; Confidential</span>
-    <span class="ft-date">{{date}}</span>
+    <span class="ft-date">[[date]]</span>
   </div>
 </div>
 
@@ -990,9 +990,9 @@
   <div class="divider"></div>
 
   <!-- Veto Warning Block (conditional — shown only if veto triggered) -->
-  {{veto_warning_block}}
+  [[veto_warning_block]]
 
-  <p class="narrative-body">{{narrative_text}}</p>
+  <p class="narrative-body">[[narrative_text]]</p>
 
   <div class="narrative-signature">
     <div class="sig-name">Pietro Martini</div>
@@ -1002,7 +1002,7 @@
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span>
     <span>Private &amp; Confidential</span>
-    <span class="ft-date">{{date}}</span>
+    <span class="ft-date">[[date]]</span>
   </div>
 </div>
 
@@ -1034,7 +1034,7 @@
 
   <div class="disc-section">
     <div class="disc-title">Confidentiality</div>
-    <p class="disc-body">This document is confidential and intended solely for the named recipient ({{client_name}}). Redistribution, duplication, or publication without written authorization from GT Global Estates &amp; Capital is strictly prohibited.</p>
+    <p class="disc-body">This document is confidential and intended solely for the named recipient ([[client_name]]). Redistribution, duplication, or publication without written authorization from GT Global Estates &amp; Capital is strictly prohibited.</p>
   </div>
 
   <div class="disc-section">
@@ -1055,7 +1055,7 @@
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span>
     <span>Private &amp; Confidential</span>
-    <span class="ft-date">{{date}}</span>
+    <span class="ft-date">[[date]]</span>
   </div>
 </div>
 
