@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GT Global Estates — Investment Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset & Page Setup ─────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold:   #B7791F;
+    --gold-lt:#D4943A;
+    --navy:   #0D1B2A;
+    --navy2:  #0A1520;
+    --navy3:  #111F30;
+    --cream:  #F5F5F0;
+    --muted:  #8A95A3;
+    --green:  #4ADE80;
+    --amber:  #F0C060;
+    --red:    #F87171;
+    --fh: 'Cormorant Garamond', Georgia, serif;
+    --fb: 'Montserrat', sans-serif;
+  }
+
+  html { font-size: 10pt; }
+
+  body {
+    font-family: var(--fb);
+    background: var(--navy);
+    color: var(--cream);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── Page Layout ─────────────────────────────────────── */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--navy);
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+  }
+
+  @media print {
+    html, body { margin: 0; padding: 0; }
+    .page { margin: 0; page-break-after: always; }
+  }
+
+  /* ── Common Elements ─────────────────────────────────── */
+  .gold { color: var(--gold); }
+  .muted { color: var(--muted); }
+
+  .page-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(183,121,31,0.15);
+    background: rgba(9,14,22,0.6);
+  }
+  .page-footer span {
+    font-family: var(--fb);
+    font-size: 6.5pt;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .page-footer .ft-date { color: var(--gold); }
+
+  .logo-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .logo-mark {
+    font-family: var(--fh);
+    font-size: 22pt;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: .06em;
+    line-height: 1;
+  }
+  .logo-sub {
+    font-family: var(--fb);
+    font-size: 5.5pt;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .sec-kicker {
+    font-family: var(--fb);
+    font-size: 6pt;
+    font-weight: 700;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .sec-kicker::before { content: '◆'; font-size: 5pt; }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(183,121,31,.5), transparent);
+    margin: 20px 0;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .col-label {
+    font-family: var(--fb);
+    font-size: 6pt;
+    font-weight: 700;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .body-text {
+    font-family: var(--fb);
+    font-size: 7.5pt;
+    font-weight: 300;
+    color: rgba(245,245,240,.75);
+    line-height: 1.85;
+  }
+
+  /* ── TABLE ───────────────────────────────────────────── */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table tr { border-bottom: 1px solid rgba(183,121,31,.1); }
+  .data-table td {
+    padding: 8px 0;
+    font-family: var(--fb);
+    font-size: 7.5pt;
+  }
+  .data-table td:first-child { color: var(--gold); font-weight: 500; }
+  .data-table td:last-child  { color: var(--cream); text-align: right; }
+
+  /* ── BADGE ───────────────────────────────────────────── */
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    font-family: var(--fb);
+    font-size: 6pt;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+  .badge-ok     { background: rgba(74,222,128,.15); color: var(--green); border: 1px solid rgba(74,222,128,.3); }
+  .badge-alert  { background: rgba(248,113,113,.12); color: var(--red);   border: 1px solid rgba(248,113,113,.3); }
+  .badge-warn   { background: rgba(240,192,96,.12);  color: var(--amber); border: 1px solid rgba(240,192,96,.3); }
+
+  /* ═══════════════════════════════════════════════════════
+     PAGE 1 — COVER
+  ═══════════════════════════════════════════════════════ */
+  #p1 {
+    background:
+      radial-gradient(ellipse at 10% 20%, rgba(183,121,31,.08) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 75%, rgba(13,27,42,.9) 0%, transparent 60%),
+      #0D1B2A;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 48px 48px 0;
+  }
+
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .cover-tag {
+    font-family: var(--fb);
+    font-size: 6pt;
+    font-weight: 700;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .cover-tag::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); }
+
+  .cover-center { padding: 60px 0 40px; }
+
+  .cover-h1 {
+    font-family: var(--fh);
+    font-size: 44pt;
+    font-weight: 300;
+    color: var(--cream);
+    line-height: .95;
+    letter-spacing: -.01em;
+    margin-bottom: 24px;
+  }
+  .cover-h1 em { font-style: italic; color: var(--gold); }
+
+  .cover-sub {
+    font-family: var(--fb);
+    font-size: 8pt;
+    font-weight: 300;
+    color: rgba(245,245,240,.55);
+    letter-spacing: .04em;
+    margin-bottom: 40px;
+  }
+
+  .cover-line {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 30px;
+  }
+
+  .cover-for {
+    font-family: var(--fb);
+    font-size: 6pt;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .cover-client {
+    font-family: var(--fh);
+    font-size: 18pt;
+    font-weight: 400;
+    color: var(--gold);
+  }
+
+  .cover-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 18px 0 72px;
+    border-top: 1px solid rgba(183,121,31,.15);
+    margin-top: 40px;
+  }
+  .cs-item { display: flex; flex-direction: column; gap: 4px; }
+  .cs-label {
+    font-family: var(--fb);
+    font-size: 5.5pt;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .cs-val {
+    font-family: var(--fh);
+    font-size: 12pt;
+    font-weight: 300;
+    color: var(--cream);
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     PAGE 2 — EXECUTIVE SUMMARY / DASHBOARD
+  ═══════════════════════════════════════════════════════ */
+  #p2 {
+    background: var(--navy);
+    padding: 48px 48px 80px;
+  }
+
+  .p2-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 36px;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .kpi-card {
+    background: rgba(13,27,42,.7);
+    border: 1px solid rgba(183,121,31,.22);
+    padding: 24px 26px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .kpi-label {
+    font-family: var(--fb);
+    font-size: 6pt;
+    font-weight: 700;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .kpi-value {
+    font-family: var(--fh);
+    font-size: 30pt;
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .kpi-unit {
+    font-family: var(--fb);
+    font-size: 6.5pt;
+    letter-spacing: .15em;
+    color: var(--muted);
+  }
+
+  /* Score bar */
+  .score-bar-wrap { margin-top: 28px; }
+  .score-bar-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,.07);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+    border-radius: 2px;
+    width: {{tri_score_pct}}%;
+  }
+  .score-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+  .score-labels span {
+    font-family: var(--fb);
+    font-size: 6pt;
+    color: var(--muted);
+    letter-spacing: .1em;
+  }
+
+  /* Investor profile badge */
+  .profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    border-radius: 2px;
+    font-family: var(--fb);
+    font-size: 6.5pt;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    margin-top: 20px;
+  }
+  .profile-retail  { background: rgba(183,121,31,.12); border: 1px solid rgba(183,121,31,.3); color: var(--gold); }
+  .profile-inst    { background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.25); color: var(--green); }
+
+  /* ═══════════════════════════════════════════════════════
+     PAGE 3 — MARKET ANALYSIS
+  ═══════════════════════════════════════════════════════ */
+  #p3 {
+    background:
+      radial-gradient(ellipse at 90% 10%, rgba(183,121,31,.05) 0%, transparent 45%),
+      var(--navy);
+    padding: 48px 48px 80px;
+  }
+
+  .p3-meta {
+    font-family: var(--fb);
+    font-size: 6pt;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .p3-meta span { color: var(--gold); }
+
+  /* ═══════════════════════════════════════════════════════
+     PAGE 4 — TRI-VETO & VALUATION
+  ═══════════════════════════════════════════════════════ */
+  #p4 {
+    background: var(--navy2);
+    padding: 48px 48px 80px;
+  }
+
+  .veto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .veto-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: rgba(13,27,42,.6);
+    border: 1px solid rgba(183,121,31,.1);
+  }
+  .veto-row-label {
+    font-family: var(--fb);
+    font-size: 7pt;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  /* GRI Section */
+  .gri-bars { margin-top: 12px; }
+  .gri-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .gri-bar-label {
+    font-family: var(--fb);
+    font-size: 6.5pt;
+    color: var(--muted);
+    width: 100px;
+    flex-shrink: 0;
+  }
+  .gri-bar-track {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,.07);
+    border-radius: 2px;
+  }
+  .gri-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, rgba(183,121,31,.5), var(--gold));
+  }
+  .gri-bar-val {
+    font-family: var(--fb);
+    font-size: 6.5pt;
+    color: var(--cream);
+    width: 24px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     PAGE 5 — FINANCIAL ANALYSIS
+  ═══════════════════════════════════════════════════════ */
+  #p5 {
+    background: var(--navy);
+    padding: 48px 48px 80px;
+  }
+
+  /* Strategy pill */
+  .strategy-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    background: rgba(183,121,31,.1);
+    border: 1px solid rgba(183,121,31,.25);
+    border-radius: 2px;
+    font-family: var(--fb);
+    font-size: 6.5pt;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  /* Recommendation box */
+  .recommendation-box {
+    background: rgba(13,27,42,.8);
+    border: 1px solid rgba(183,121,31,.3);
+    border-left: 3px solid var(--gold);
+    padding: 22px 26px;
+    margin-top: 20px;
+  }
+  .rec-title {
+    font-family: var(--fh);
+    font-size: 13pt;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .rec-body {
+    font-family: var(--fb);
+    font-size: 7.5pt;
+    font-weight: 300;
+    color: rgba(245,245,240,.8);
+    line-height: 1.8;
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     PAGE 6 — NARRATIVE ANALYSIS (AI-generated)
+  ═══════════════════════════════════════════════════════ */
+  #p6 {
+    background:
+      radial-gradient(ellipse at 15% 80%, rgba(183,121,31,.06) 0%, transparent 50%),
+      var(--navy2);
+    padding: 48px 48px 80px;
+  }
+
+  .narrative-body {
+    font-family: var(--fh);
+    font-size: 10pt;
+    font-weight: 300;
+    color: rgba(245,245,240,.85);
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .narrative-signature {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(183,121,31,.2);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .sig-name {
+    font-family: var(--fh);
+    font-size: 14pt;
+    font-weight: 400;
+    color: var(--gold);
+    font-style: italic;
+  }
+  .sig-role {
+    font-family: var(--fb);
+    font-size: 6pt;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     PAGE 7 — DISCLAIMER
+  ═══════════════════════════════════════════════════════ */
+  #p7 {
+    background: var(--navy);
+    padding: 48px 48px 80px;
+  }
+
+  .disc-section { margin-bottom: 24px; }
+  .disc-title {
+    font-family: var(--fh);
+    font-size: 10pt;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .disc-body {
+    font-family: var(--fb);
+    font-size: 7pt;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 1 — COVER
+═══════════════════════════════════════════════════════ -->
+<div class="page" id="p1">
+
+  <div class="cover-top">
+    <div class="cover-tag">Strategic Real Estate Intelligence</div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+
+  <div class="cover-center">
+    <h1 class="cover-h1">
+      GT GLOBAL<br><em>ESTATES</em>
+    </h1>
+    <div class="cover-sub">S T R A T E G I C &nbsp; R E A L &nbsp; E S T A T E &nbsp; I N T E L L I G E N C E</div>
+    <div class="cover-line"></div>
+    <h2 style="font-family:var(--fh);font-size:28pt;font-weight:300;color:var(--cream);line-height:1.1;margin-bottom:20px;">
+      {{property_name}}
+    </h2>
+    <div style="font-family:var(--fb);font-size:8pt;font-weight:300;color:rgba(245,245,240,.5);letter-spacing:.06em;margin-bottom:40px;">
+      Investment Analysis &amp; Valuation Report
+    </div>
+    <div class="cover-for">Prepared Exclusively For</div>
+    <div class="cover-client">{{client_name}}</div>
+  </div>
+
+  <div class="cover-strip">
+    <div class="cs-item">
+      <span class="cs-label">Prepared by</span>
+      <span class="cs-val" style="font-size:9pt;">GT Global Estates &amp; Capital</span>
+    </div>
+    <div class="cs-item" style="text-align:center;">
+      <span class="cs-label">Classification</span>
+      <span class="cs-val" style="font-size:9pt;">Private &amp; Confidential</span>
+    </div>
+    <div class="cs-item" style="text-align:right;">
+      <span class="cs-label">Date</span>
+      <span class="cs-val" style="font-size:9pt;color:var(--gold);">{{date}}</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span>
+    <span>Private &amp; Confidential</span>
+    <span class="ft-date">{{date}}</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 2 — EXECUTIVE SUMMARY
+═══════════════════════════════════════════════════════ -->
+<div class="page" id="p2">
+
+  <div class="p2-header">
+    <div>
+      <div class="sec-kicker">Executive Summary</div>
+      <h2 style="font-family:var(--fh);font-size:26pt;font-weight:300;color:var(--cream);line-height:1.05;">
+        Key Performance<br><em style="color:var(--gold);font-style:italic;">Indicators</em>
+      </h2>
+    </div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Investor Profile -->
+  <div class="profile-badge {{investor_profile_class}}">
+    ◆ &nbsp; {{investor_profile_label}}
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+
+    <div class="kpi-card">
+      <div class="kpi-label">Acquisition Price</div>
+      <div class="kpi-value">{{price}}</div>
+      <div class="kpi-unit">EUR</div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Gross Yield</div>
+      <div class="kpi-value">{{yield}}</div>
+      <div class="kpi-unit">% p.a.</div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">TRI Score</div>
+      <div class="kpi-value">{{tri_score}}</div>
+      <div class="kpi-unit">Rating (0–10)</div>
+      <div class="score-bar-wrap">
+        <div class="score-bar-track">
+          <div class="score-bar-fill"></div>
+        </div>
+        <div class="score-labels">
+          <span>High Risk</span>
+          <span>Low Risk</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-label">Seismic Classification</div>
+      <div class="kpi-value" style="font-size:24pt;">{{seismic_class}}</div>
+      <div class="kpi-unit">Risk Assessment</div>
+    </div>
+
+  </div>
+
+  <!-- Asset Quick Info -->
+  <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+    <div style="background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);padding:14px 16px;">
+      <div class="col-label">Location</div>
+      <div style="font-family:var(--fh);font-size:10pt;color:var(--cream);">{{city}}</div>
+      <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:3px;">{{country}}</div>
+    </div>
+    <div style="background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);padding:14px 16px;">
+      <div class="col-label">Asset Type</div>
+      <div style="font-family:var(--fh);font-size:10pt;color:var(--cream);">{{asset_type}}</div>
+      <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:3px;">{{segment}}</div>
+    </div>
+    <div style="background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);padding:14px 16px;">
+      <div class="col-label">Strategy</div>
+      <div style="font-family:var(--fh);font-size:10pt;color:var(--cream);">{{strategy_label}}</div>
+      <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:3px;">{{strategy_sub}}</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span>
+    <span>Private &amp; Confidential</span>
+    <span class="ft-date">{{date}}</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 3 — MARKET ANALYSIS
+═══════════════════════════════════════════════════════ -->
+<div class="page" id="p3">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+    <div>
+      <div class="sec-kicker">Market Analysis &amp; Ownership Framework</div>
+      <h2 style="font-family:var(--fh);font-size:22pt;font-weight:300;color:var(--cream);">
+        Market Analysis <em style="color:var(--gold);font-style:italic;">&amp; Ownership Framework</em>
+      </h2>
+    </div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+
+  <div class="p3-meta">
+    <span>Location: <span>{{city}}, {{country}}</span></span>
+    <span>Asset Type: <span>{{asset_type}}</span></span>
+    <span>Segment: <span>{{segment}}</span></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div>
+      <div class="col-label">Macroeconomic Fundamentals</div>
+      <p class="body-text">{{macro_analysis}}</p>
+    </div>
+    <div>
+      <div class="col-label">Market Indicators</div>
+      <table class="data-table">
+        <tr><td>GDP Growth (5Y)</td><td>{{gdp_growth}}</td></tr>
+        <tr><td>Unemployment Rate</td><td>{{unemployment}}</td></tr>
+        <tr><td>Vacancy Rate</td><td>{{vacancy_rate}}</td></tr>
+        <tr><td>Price Appreciation (3Y)</td><td>{{price_appreciation}}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div>
+      <div class="col-label">Ownership Layers Framework</div>
+      <p class="body-text">{{ownership_layers}}</p>
+    </div>
+    <div>
+      <div class="col-label">Rent-Gap Analysis</div>
+      <p class="body-text">{{rent_gap_analysis}}</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span>
+    <span>Private &amp; Confidential</span>
+    <span class="ft-date">{{date}}</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 4 — TRI-VETO & SR-IIT VALUATION
+═══════════════════════════════════════════════════════ -->
+<div class="page" id="p4">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+    <div>
+      <div class="sec-kicker">Advanced Risk Assessment &amp; Value Determination</div>
+      <h2 style="font-family:var(--fh);font-size:22pt;font-weight:300;color:var(--cream);">
+        Title Risk Index <em style="color:var(--gold);font-style:italic;">&amp; SR-IIT Valuation</em>
+      </h2>
+    </div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="two-col">
+
+    <div>
+      <div class="col-label">TRI-Veto Logic</div>
+      <p class="body-text">{{tri_veto_logic}}</p>
+
+      <div style="margin-top:20px;">
+        <div class="col-label">Veto-Check: Binary Knockout Criteria</div>
+        <div class="veto-grid">
+          <div class="veto-row">
+            <span class="veto-row-label">Seismic Risk (RS I)</span>
+            <span class="badge badge-{{seismic_veto_class}}">{{seismic_veto}}</span>
+          </div>
+          <div class="veto-row">
+            <span class="veto-row-label">Supreme Court Proceedings</span>
+            <span class="badge badge-{{court_veto_class}}">{{court_veto}}</span>
+          </div>
+          <div class="veto-row">
+            <span class="veto-row-label">Non-Registered Property</span>
+            <span class="badge badge-{{registration_veto_class}}">{{registration_veto}}</span>
+          </div>
+          <div class="veto-row">
+            <span class="veto-row-label">Ownership Claims</span>
+            <span class="badge badge-{{ownership_veto_class}}">{{ownership_veto}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRI — New from website -->
+      <div style="margin-top:20px;">
+        <div class="col-label">Geopolitical Risk Index (GRI)</div>
+        <div class="gri-bars">
+          <div class="gri-bar-row">
+            <span class="gri-bar-label">Conflict Risk</span>
+            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:{{gri_conflict_pct}}%"></div></div>
+            <span class="gri-bar-val">{{gri_conflict}}</span>
+          </div>
+          <div class="gri-bar-row">
+            <span class="gri-bar-label">Fiscal Risk</span>
+            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:{{gri_fiscal_pct}}%"></div></div>
+            <span class="gri-bar-val">{{gri_fiscal}}</span>
+          </div>
+          <div class="gri-bar-row">
+            <span class="gri-bar-label">Exit Risk</span>
+            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:{{gri_exit_pct}}%"></div></div>
+            <span class="gri-bar-val">{{gri_exit}}</span>
+          </div>
+          <div class="gri-bar-row">
+            <span class="gri-bar-label" style="color:var(--gold);font-weight:600;">Composite GRI</span>
+            <div class="gri-bar-track"><div class="gri-bar-fill" style="width:{{gri_composite_pct}}%;background:linear-gradient(90deg,var(--gold),var(--gold-lt))"></div></div>
+            <span class="gri-bar-val" style="color:var(--gold);">{{gri_composite}}</span>
+          </div>
+        </div>
+        <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:6px;">
+          GR_adj: <span style="color:var(--gold);">{{gr_adj_pct}}%</span> of V_phys
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="col-label">SR-IIT Value Formula</div>
+      <p class="body-text">{{sr_iit_formula}}</p>
+
+      <div style="margin-top:20px;">
+        <div class="col-label">Investor Profile &amp; MAO</div>
+        <table class="data-table">
+          <tr><td>Target Return (Retail)</td><td>{{tr_retail}}</td></tr>
+          <tr><td>Target Return (Institutional)</td><td>{{tr_institutional}}</td></tr>
+          <tr><td>MAO (Retail)</td><td>{{mao_retail}}</td></tr>
+          <tr><td>MAO (Institutional)</td><td>{{mao_institutional}}</td></tr>
+        </table>
+      </div>
+
+      <div style="margin-top:20px;">
+        <div class="col-label">Tax Residency</div>
+        <div style="font-family:var(--fb);font-size:7.5pt;color:var(--cream);padding:8px 12px;background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);">
+          {{tax_residency}}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span>
+    <span>Private &amp; Confidential</span>
+    <span class="ft-date">{{date}}</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 5 — FINANCIAL ANALYSIS
+═══════════════════════════════════════════════════════ -->
+<div class="page" id="p5">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+    <div>
+      <div class="sec-kicker">Comprehensive Valuation &amp; Strategic Guidance</div>
+      <h2 style="font-family:var(--fh);font-size:22pt;font-weight:300;color:var(--cream);">
+        Financial Analysis <em style="color:var(--gold);font-style:italic;">&amp; Investment Recommendation</em>
+      </h2>
+    </div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+
+  <div class="strategy-pill">▶ &nbsp; Strategy: {{strategy_label}}</div>
+
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div>
+      <div class="col-label">Asset Specifications</div>
+      <table class="data-table">
+        <tr><td>Usable Area</td><td>{{usable_area}}</td></tr>
+        <tr><td>Year Built</td><td>{{year_built}}</td></tr>
+        <tr><td>Energy Efficiency</td><td>{{energy_rating}}</td></tr>
+        <tr><td>Condition</td><td>{{condition}}</td></tr>
+        <tr><td>District</td><td>{{district}}</td></tr>
+        <tr><td>Full Address</td><td>{{address}}</td></tr>
+      </table>
+    </div>
+
+    <div>
+      <div class="col-label">Financial Metrics</div>
+      <table class="data-table">
+        <tr><td>Acquisition Price</td><td>{{price}}</td></tr>
+        <tr><td>Equity / Own Capital</td><td>{{equity}}</td></tr>
+        <tr><td>Ancillary Costs</td><td>{{ancillary_costs}}</td></tr>
+        <tr><td>Monthly Rent</td><td>{{monthly_rent}}</td></tr>
+        <tr><td>Net Rental Yield</td><td>{{net_yield}}</td></tr>
+        <tr><td>Cap Rate</td><td>{{cap_rate}}</td></tr>
+        <tr><td>CoC Return (5Y)</td><td>{{coc_return}}</td></tr>
+        <tr><td>IRR Projection</td><td>{{irr_projection}}</td></tr>
+        <tr><td>Interest Rate</td><td>{{interest_rate}}</td></tr>
+        <tr><td>Vacancy Rate</td><td>{{vacancy_rate_asset}}</td></tr>
+        <tr><td>Management Cost</td><td>{{management_cost}}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="col-label">Junkspace Obsolescence Assessment</div>
+    <p class="body-text">{{junkspace_analysis}}</p>
+  </div>
+
+  <div class="recommendation-box">
+    <div class="rec-title">Investment Recommendation</div>
+    <div class="rec-body">{{recommendation}}</div>
+  </div>
+
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span>
+    <span>Private &amp; Confidential</span>
+    <span class="ft-date">{{date}}</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 6 — NARRATIVE ANALYSIS (AI-generated by Gemini)
+═══════════════════════════════════════════════════════ -->
+<div class="page" id="p6">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+    <div>
+      <div class="sec-kicker">Strategic Intelligence Report</div>
+      <h2 style="font-family:var(--fh);font-size:22pt;font-weight:300;color:var(--cream);">
+        Executive <em style="color:var(--gold);font-style:italic;">Narrative</em>
+      </h2>
+    </div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Veto Warning Block (conditional — shown only if veto triggered) -->
+  {{veto_warning_block}}
+
+  <p class="narrative-body">{{narrative_text}}</p>
+
+  <div class="narrative-signature">
+    <div class="sig-name">Pietro Martini</div>
+    <div class="sig-role">Founder &amp; CEO · GT Global Estates &amp; Capital</div>
+  </div>
+
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span>
+    <span>Private &amp; Confidential</span>
+    <span class="ft-date">{{date}}</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 7 — LEGAL DISCLAIMER
+═══════════════════════════════════════════════════════ -->
+<div class="page" id="p7">
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:36px;">
+    <div>
+      <div class="sec-kicker">Legal &amp; Compliance</div>
+      <h2 style="font-family:var(--fh);font-size:22pt;font-weight:300;color:var(--cream);">
+        Legal Disclaimer <em style="color:var(--gold);font-style:italic;">&amp; Disclosures</em>
+      </h2>
+    </div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="disc-section">
+    <div class="disc-title">Limitation of Liability</div>
+    <p class="disc-body">This report has been prepared by GT Global Estates &amp; Capital and is based on information available at the time of preparation. The analyses and recommendations constitute professional opinions and do not guarantee future performance or outcomes. GT Global Estates &amp; Capital assumes no liability for losses or damages arising from the use of this report.</p>
+  </div>
+
+  <div class="disc-section">
+    <div class="disc-title">Confidentiality</div>
+    <p class="disc-body">This document is confidential and intended solely for the named recipient ({{client_name}}). Redistribution, duplication, or publication without written authorization from GT Global Estates &amp; Capital is strictly prohibited.</p>
+  </div>
+
+  <div class="disc-section">
+    <div class="disc-title">Methodological Foundation</div>
+    <p class="disc-body">This assessment is grounded in the SR-IIT Value Formula and the TRI-Veto System, as developed by Pietro Martini (2026). Case studies are based on participatory observation; sample size (n=23) falls below requirements for parametric significance testing.</p>
+  </div>
+
+  <div class="disc-section">
+    <div class="disc-title">Professional Consultation Required</div>
+    <p class="disc-body">This report does not substitute for advice from qualified tax advisors, legal counsel, or financial consultants. Prior to any investment decision, appropriate professional guidance should be obtained.</p>
+  </div>
+
+  <div class="disc-section">
+    <div class="disc-title">Copyright &amp; Intellectual Property</div>
+    <p class="disc-body">© 2026 GT Global Estates &amp; Capital. All rights reserved. Reproduction, distribution, or use of this report without express written permission is prohibited.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span>
+    <span>Private &amp; Confidential</span>
+    <span class="ft-date">{{date}}</span>
+  </div>
+</div>
+
+</body>
+</html>
