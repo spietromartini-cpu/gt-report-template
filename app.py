@@ -21,12 +21,14 @@ API_KEY = os.environ.get("API_KEY")
 class InvestmentReportGenerator:
     """
     Generates institutional PDF investment reports.
-    Placeholders use {{key}} syntax — replace from Make.com / Gemini AI data.
+    Placeholders use [[key]] syntax — replace from Make.com / Gemini AI data.
     """
 
     def __init__(self, template_path: str):
         self.template_path = template_path
         self.template_content = self._load_template()
+        # WICHTIG: Damit das PDF-Design (CSS & Bilder) gefunden wird!
+        self.base_url = str(Path(template_path).parent.resolve())
 
     def _load_template(self) -> str:
         try:
@@ -38,15 +40,18 @@ class InvestmentReportGenerator:
     def generate_pdf_bytes(self, data: dict) -> io.BytesIO:
         html_content = self.template_content
         for key, value in data.items():
-            placeholder = "{{" + key + "}}"
+            # FIX 1: Umstellung auf eckige Klammern [[key]]
+            placeholder = "[[" + key + "]]"
             html_content = html_content.replace(placeholder, str(value))
 
-        remaining = re.findall(r'\{\{(\w+)\}\}', html_content)
+        # FIX 2: Verbesserte Suche für Rest-Platzhalter (erkennt auch Leerzeichen)
+        remaining = re.findall(r'\[\[(.*?)\]\]', html_content)
         if remaining:
             print(f"Warning — unreplaced placeholders: {remaining}")
 
         pdf_buffer = io.BytesIO()
-        HTML(string=html_content).write_pdf(pdf_buffer)
+        # FIX 3: base_url hinzugefügt, damit das Design (CSS) geladen wird!
+        HTML(string=html_content, base_url=self.base_url).write_pdf(pdf_buffer)
         pdf_buffer.seek(0)
         return pdf_buffer
 
