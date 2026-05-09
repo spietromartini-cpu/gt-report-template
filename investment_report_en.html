@@ -6,6 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* ── WeasyPrint Page Setup (Keine Ränder) ───────────── */
   @page {
     size: A4;
     margin: 0;
@@ -35,24 +36,26 @@
     font-family: var(--fb);
     background: var(--navy);
     color: var(--cream);
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    margin: 0;
+    padding: 0;
   }
 
   /* ── Page Layout ─────────────────────────────────────── */
   .page {
-    width: 210mm;
-    height: 296.5mm; /* FIX: Ein halber Millimeter Puffer verhindert den WeasyPrint-Absturz */
+    box-sizing: border-box;
+    width: 100%;
+    height: 296.5mm; /* 0.5mm Puffer verhindert Umbruch-Bugs */
     margin: 0 auto;
     background: var(--navy);
     position: relative;
     page-break-after: always;
-    overflow: hidden;
+    break-after: page;
   }
 
-  @media print {
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
-    .page { margin: 0; page-break-after: always; }
+  /* Verhindert eine leere letzte Seite im PDF */
+  .page:last-child {
+    page-break-after: avoid;
+    break-after: auto;
   }
 
   /* ── Common Elements ─────────────────────────────────── */
@@ -205,15 +208,4 @@
     gap: 14px;
     margin-top: 8px;
   }
-  .cover-tag::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); }
-
-  .cover-center { padding: 60px 0 40px; }
-
-  .cover-h1 {
-    font-family: var(--fh);
-    font-size: 44pt;
-    font-weight: 300;
-    color: var(--cream);
-    line-height: .95;
-    letter-spacing: -.01em;
-    margin-bottom: 24px;
+  .cover-tag::before { content: ''; display: block; width
