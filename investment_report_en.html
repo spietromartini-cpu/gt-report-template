@@ -9,12 +9,6 @@
   /* ── Reset & Page Setup ─────────────────────────────── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* WICHTIG: Das sorgt für den randlosen, perfekten A4-Druck! */
-  @page {
-    size: A4;
-    margin: 0;
-  }
-
   :root {
     --gold:   #B7791F;
     --gold-lt:#D4943A;
@@ -849,34 +843,49 @@
           </div>
         </div>
         <div style="font-family:var(--fb);font-size:6.5pt;color:var(--muted);margin-top:6px;">
-          GR_adj: <span style="color:var(--gold);">[[gr_adj_pct]]%</span> of V_phys
+          Risk Absorbed via <span style="color:var(--gold);">Country Risk Premium (CRP)</span> in WACC
         </div>
       </div>
     </div>
 
     <div>
-      <div class="col-label">SR-IIT Value Formula</div>
-      <p class="body-text">[[sr_iit_formula]]</p>
+      <div class="col-label">SR-IIT Valuation Framework (2026 Revision)</div>
+      <div class="body-text" style="margin-bottom:8px; line-height: 1.4;">
+        <strong style="color:var(--gold);">Stufe 1: Base Value</strong><br>
+        NPV of Cashflows + SROI
+      </div>
+      <div class="body-text" style="margin-bottom:8px; line-height: 1.4;">
+        <strong style="color:var(--gold);">Stufe 2: Intrinsic Value</strong><br>
+        Adjusted for Title Risk (TRI) &amp; Brown Discount
+      </div>
+      <div class="body-text" style="margin-bottom:16px; line-height: 1.4;">
+        <strong style="color:var(--gold);">Stufe 3: MAO (Max Allowable Offer)</strong><br>
+        Post-CapEx, Post-Tax (OUG 156/2024) &amp; Risk Margin
+      </div>
 
-      <div style="margin-top:20px;">
-        <div class="col-label">Investor Profile &amp; MAO</div>
+      <div style="margin-top:24px;">
+        <div class="col-label">Value Determination &amp; MAO</div>
         <table class="data-table">
-          <tr><td>Target Return (Retail)</td><td>[[tr_retail]]</td></tr>
-          <tr><td>Target Return (Institutional)</td><td>[[tr_institutional]]</td></tr>
-          <tr><td>MAO (Retail)</td><td>[[mao_retail]]</td></tr>
-          <tr><td>MAO (Institutional)</td><td>[[mao_institutional]]</td></tr>
+          <tr><td>Base Value (V_base)</td><td>[[v_base_str]]</td></tr>
+          <tr><td>Intrinsic Value</td><td>[[v_intrinsic_str]]</td></tr>
+          <tr><td>Arbitrage Margin (&pi;_risk)</td><td>[[pi_risk_pct]]</td></tr>
+          <tr style="background: rgba(183,121,31,.1);">
+            <td style="color:var(--gold);font-weight:700;padding-left:6px;">MAO Limit</td>
+            <td style="color:var(--gold);font-weight:700;font-size:9pt;padding-right:6px;">[[mao_str]]</td>
+          </tr>
         </table>
       </div>
 
-      <div style="margin-top:20px;">
-        <div class="col-label">Tax Residency</div>
-        <div style="font-family:var(--fb);font-size:7.5pt;color:var(--cream);padding:8px 12px;background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);">
-          [[tax_residency]]
+      <div style="margin-top:24px;">
+        <div class="col-label">Regulatory Impact (EPBD &amp; OUG)</div>
+        <div style="font-family:var(--fb);font-size:7pt;color:var(--cream);padding:12px;background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.22);display:flex;flex-direction:column;gap:10px;line-height:1.4;">
+          <div><span style="color:var(--red);font-weight:600;letter-spacing:.1em;">EVR PRIORITY:</span> <span style="color:var(--muted);">[[evr_priority_status]]</span></div>
+          <div><span style="color:var(--amber);font-weight:600;letter-spacing:.1em;">BROWN DISCOUNT:</span> <span style="color:var(--muted);">[[brown_discount_impact]]</span></div>
+          <div><span style="color:var(--gold);font-weight:600;letter-spacing:.1em;">TAX REGIME:</span> <span style="color:var(--muted);">[[tax_regime_warning]]</span></div>
         </div>
       </div>
     </div>
-
-  </div>
+    </div>
 
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span>
