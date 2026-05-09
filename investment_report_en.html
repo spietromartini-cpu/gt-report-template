@@ -7,112 +7,73 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ── WEASYPRINT BULLETPROOF PAGE SETUP ───────────── */
-  @page {
-    size: A4;
-    margin: 0mm;
-  }
-
+  @page { size: A4; margin: 0mm; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --gold:   #B7791F;
-    --gold-lt:#D4943A;
-    --navy:   #0D1B2A;
-    --navy2:  #0A1520;
-    --cream:  #F5F5F0;
-    --muted:  #8A95A3;
-    --green:  #4ADE80;
-    --amber:  #F0C060;
-    --red:    #F87171;
-    --fh: 'Cormorant Garamond', Georgia, serif;
-    --fb: 'Montserrat', sans-serif;
-  }
-
+  
   html { font-size: 10pt; margin: 0; padding: 0; }
-
-  body {
-    font-family: var(--fb);
-    background-color: var(--navy);
-    color: var(--cream);
-    margin: 0; padding: 0;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
+  body { font-family: 'Montserrat', sans-serif; background-color: #0D1B2A; color: #F5F5F0; margin: 0; padding: 0; }
+  
   .page {
     width: 210mm; height: 296mm;
-    box-sizing: border-box;
-    margin: 0 auto;
-    background-color: var(--navy);
+    box-sizing: border-box; margin: 0 auto;
+    background-color: #0D1B2A;
     position: relative;
-    page-break-after: always;
-    break-after: page;
-    overflow: hidden;
+    page-break-after: always; overflow: hidden;
   }
-
+  
   .page-footer {
     position: absolute; bottom: 0; left: 0; right: 0;
-    padding: 14px 40px;
-    display: flex; justify-content: space-between; align-items: center;
-    border-top: 1px solid rgba(183,121,31,0.15);
-    background: rgba(9,14,22,0.6);
+    padding: 14px 40px; display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(183,121,31,0.15); background: rgba(9,14,22,0.6);
   }
-  .page-footer span {
-    font-family: var(--fb); font-size: 6.5pt; letter-spacing: .18em;
-    text-transform: uppercase; color: var(--muted);
-  }
-  .page-footer .ft-date { color: var(--gold); }
-
+  .page-footer span { font-family: 'Montserrat', sans-serif; font-size: 6.5pt; letter-spacing: .18em; text-transform: uppercase; color: #8A95A3; }
+  .page-footer .ft-date { color: #B7791F; }
+  
   .logo-block { display: flex; flex-direction: column; align-items: flex-end; }
-  .logo-mark { font-family: var(--fh); font-size: 22pt; font-weight: 300; color: var(--gold); letter-spacing: .06em; line-height: 1; }
-  .logo-sub { font-family: var(--fb); font-size: 5.5pt; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
-
-  .sec-kicker { font-family: var(--fb); font-size: 6pt; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .logo-mark { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22pt; font-weight: 300; color: #B7791F; letter-spacing: .06em; line-height: 1; }
+  .logo-sub { font-family: 'Montserrat', sans-serif; font-size: 5.5pt; letter-spacing: .3em; text-transform: uppercase; color: #8A95A3; margin-top: 3px; }
+  
+  .sec-kicker { font-family: 'Montserrat', sans-serif; font-size: 6pt; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: #B7791F; display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
   .sec-kicker::before { content: '◆'; font-size: 5pt; }
-
-  .divider { width: 100%; height: 1px; background: linear-gradient(90deg, rgba(183,121,31,.5), transparent); margin: 20px 0; }
-
+  
+  .divider { width: 100%; height: 1px; background: #B7791F; opacity: 0.5; margin: 20px 0; }
+  
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-
-  .col-label { font-family: var(--fb); font-size: 6pt; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
-
-  .body-text { font-family: var(--fb); font-size: 7.5pt; font-weight: 300; color: rgba(245,245,240,.75); line-height: 1.85; }
-
+  .col-label { font-family: 'Montserrat', sans-serif; font-size: 6pt; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; color: #B7791F; margin-bottom: 10px; }
+  .body-text { font-family: 'Montserrat', sans-serif; font-size: 7.5pt; font-weight: 300; color: rgba(245,245,240,.75); line-height: 1.85; }
+  
   .data-table { width: 100%; border-collapse: collapse; }
   .data-table tr { border-bottom: 1px solid rgba(183,121,31,.1); }
-  .data-table td { padding: 8px 0; font-family: var(--fb); font-size: 7.5pt; }
-  .data-table td:first-child { color: var(--gold); font-weight: 500; }
-  .data-table td:last-child  { color: var(--cream); text-align: right; }
-
-  .badge { display: inline-block; padding: 4px 12px; font-family: var(--fb); font-size: 6pt; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; border-radius: 2px; }
-  .badge-ok     { background: rgba(74,222,128,.15); color: var(--green); border: 1px solid rgba(74,222,128,.3); }
-  .badge-alert  { background: rgba(248,113,113,.12); color: var(--red);   border: 1px solid rgba(248,113,113,.3); }
-
-  /* BACKGROUNDS */
-  #p1 { background: radial-gradient(ellipse at 10% 20%, rgba(183,121,31,.08) 0%, transparent 55%), #0D1B2A; padding: 48px; }
-  #p2, #p5, #p7 { background-color: var(--navy); padding: 48px 48px 80px; }
-  #p3 { background: radial-gradient(ellipse at 90% 10%, rgba(183,121,31,.05) 0%, transparent 45%), var(--navy); padding: 48px 48px 80px; }
-  #p4 { background-color: var(--navy2); padding: 48px 48px 80px; }
-  #p6 { background: radial-gradient(ellipse at 15% 80%, rgba(183,121,31,.06) 0%, transparent 50%), var(--navy2); padding: 48px 48px 80px; }
+  .data-table td { padding: 8px 0; font-family: 'Montserrat', sans-serif; font-size: 7.5pt; }
+  .data-table td:first-child { color: #B7791F; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; font-size: 6.5pt; }
+  .data-table td:last-child  { color: #F5F5F0; text-align: right; font-weight: 500; font-size: 8.5pt; }
+  
+  .badge { display: inline-block; padding: 4px 12px; font-family: 'Montserrat', sans-serif; font-size: 6pt; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; border-radius: 2px; }
+  .badge-ok     { background: rgba(74,222,128,.15); color: #4ADE80; border: 1px solid rgba(74,222,128,.3); }
+  .badge-alert  { background: rgba(248,113,113,.12); color: #F87171; border: 1px solid rgba(248,113,113,.3); }
+  
+  /* Backgrounds */
+  #p1, #p2, #p3, #p5, #p7 { background-color: #0D1B2A; padding: 48px; }
+  #p4, #p6 { background-color: #0A1520; padding: 48px; }
 </style>
 </head>
 <body>
 
 <div class="page" id="p1">
   <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-    <div style="font-family: var(--fb); font-size: 6pt; font-weight: 700; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); margin-top: 8px;">Strategic Real Estate Intelligence</div>
+    <div style="font-family: 'Montserrat', sans-serif; font-size: 6pt; font-weight: 700; letter-spacing: .32em; color: #B7791F; margin-top: 8px;">STRATEGIC REAL ESTATE INTELLIGENCE</div>
     <div class="logo-block">
       <div class="logo-mark">G&amp;T</div>
       <div class="logo-sub">Global Estates &amp; Capital</div>
     </div>
   </div>
   <div style="margin-top: 140px;">
-    <h1 style="font-family: var(--fh); font-size: 44pt; font-weight: 300; color: var(--cream); line-height: .95; margin-bottom: 24px;">GT GLOBAL<br><em style="color: var(--gold); font-style: italic;">ESTATES</em></h1>
-    <div style="width: 60px; height: 1px; background: var(--gold); margin-bottom: 30px;"></div>
-    <h2 style="font-family: var(--fh); font-size: 28pt; font-weight: 300; color: var(--cream); margin-bottom: 20px;">[[property_name]]</h2>
-    <div style="font-family: var(--fb); font-size: 8pt; font-weight: 300; color: rgba(245,245,240,.5); margin-bottom: 40px;">Investment Analysis &amp; Valuation Report</div>
-    <div style="font-family: var(--fb); font-size: 6pt; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px;">Prepared Exclusively For</div>
-    <div style="font-family: var(--fh); font-size: 18pt; color: var(--gold);">[[client_name]]</div>
+    <h1 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 44pt; font-weight: 300; color: #F5F5F0; line-height: .95; margin-bottom: 24px;">GT GLOBAL<br><em style="color: #B7791F; font-style: italic;">ESTATES</em></h1>
+    <div style="width: 60px; height: 1px; background: #B7791F; margin-bottom: 30px;"></div>
+    <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28pt; font-weight: 300; color: #F5F5F0; margin-bottom: 20px;">[[property_name]]</h2>
+    <div style="font-family: 'Montserrat', sans-serif; font-size: 8pt; color: rgba(245,245,240,.5); margin-bottom: 40px;">Investment Analysis &amp; Valuation Report</div>
+    <div style="font-family: 'Montserrat', sans-serif; font-size: 6pt; letter-spacing: .22em; color: #8A95A3; margin-bottom: 6px; text-transform: uppercase;">Prepared Exclusively For</div>
+    <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18pt; color: #B7791F;">[[client_name]]</div>
   </div>
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span><span>Private &amp; Confidential</span><span class="ft-date">[[date]]</span>
@@ -123,12 +84,12 @@
   <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
     <div>
       <div class="sec-kicker">Executive Summary</div>
-      <h2 style="font-family:var(--fh); font-size:32pt; font-weight:300; color:var(--cream); line-height:1.1;">Strategic Market<br><em style="color:var(--gold); font-style:italic;">Intelligence Report</em></h2>
+      <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:32pt; font-weight:300; color:#F5F5F0; line-height:1.1;">Strategic Market<br><em style="color:#B7791F; font-style:italic;">Intelligence Report</em></h2>
     </div>
     <div style="text-align: center; min-width: 180px; padding: 15px; border: 2px solid; border-radius: 4px; background: rgba(13,27,42,0.8);" class="[[deal_decision_class]]">
-      <div style="font-family:var(--fb); font-size:7pt; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; margin-bottom: 8px; color: var(--muted);">Recommendation</div>
-      <div style="font-family:var(--fh); font-size:38pt; font-weight:400; line-height:1; margin-bottom: 5px;">[[deal_decision_text]]</div>
-      <div style="font-family:var(--fb); font-size:6pt; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; opacity: 0.8;">Verified by SR-IIT</div>
+      <div style="font-family: 'Montserrat', sans-serif; font-size:7pt; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; margin-bottom: 8px; color: #8A95A3;">Recommendation</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:38pt; font-weight:400; line-height:1; margin-bottom: 5px;">[[deal_decision_text]]</div>
+      <div style="font-family: 'Montserrat', sans-serif; font-size:6pt; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; opacity: 0.8;">Verified by SR-IIT</div>
     </div>
   </div>
   <div class="divider"></div>
@@ -136,28 +97,75 @@
   <div class="two-col" style="margin-top: 30px;">
     <div style="background: rgba(13,27,42,.7); border: 1px solid rgba(183,121,31,.22); padding: 24px;">
       <div class="col-label">Acquisition Price</div>
-      <div style="font-family: var(--fh); font-size: 30pt; color: var(--cream);">[[price]]</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 30pt; color: #F5F5F0;">[[price]]</div>
     </div>
     <div style="background: rgba(13,27,42,.7); border: 1px solid rgba(183,121,31,.22); padding: 24px;">
       <div class="col-label">Gross Yield</div>
-      <div style="font-family: var(--fh); font-size: 30pt; color: var(--cream);">[[yield]]</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 30pt; color: #F5F5F0;">[[yield]]</div>
     </div>
   </div>
 
   <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
     <div style="background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);padding:14px;">
       <div class="col-label">Location</div>
-      <div style="font-family: var(--fh); font-size:12pt; color:var(--cream);">[[city]], [[country]]</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:12pt; color:#F5F5F0;">[[city]], [[country]]</div>
     </div>
     <div style="background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);padding:14px;">
       <div class="col-label">Asset Type</div>
-      <div style="font-family: var(--fh); font-size:12pt; color:var(--cream);">[[asset_type]]</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:12pt; color:#F5F5F0;">[[asset_type]]</div>
     </div>
     <div style="background:rgba(13,27,42,.5);border:1px solid rgba(183,121,31,.12);padding:14px;">
       <div class="col-label">Strategy</div>
-      <div style="font-family: var(--fh); font-size:12pt; color:var(--cream);">[[strategy_label]]</div>
+      <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:12pt; color:#F5F5F0;">[[strategy_label]]</div>
     </div>
   </div>
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span><span>Private &amp; Confidential</span><span class="ft-date">[[date]]</span>
+  </div>
+</div>
+
+<div class="page" id="p3">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+    <div>
+      <div class="sec-kicker">Market Analysis &amp; Ownership Framework</div>
+      <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:22pt; font-weight:300; color:#F5F5F0;">Market Analysis <em style="color:#B7791F; font-style:italic;">&amp; Ownership Framework</em></h2>
+    </div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div>
+      <div class="col-label">Macroeconomic Fundamentals</div>
+      <p class="body-text">[[macro_analysis]]</p>
+    </div>
+    <div>
+      <div class="col-label">Market Indicators</div>
+      <table class="data-table">
+        <tr><td>GDP Growth (5Y)</td><td>[[gdp_growth]]</td></tr>
+        <tr><td>Unemployment Rate</td><td>[[unemployment]]</td></tr>
+        <tr><td>Vacancy Rate</td><td>[[vacancy_rate]]</td></tr>
+        <tr><td>Price Appreciation (3Y)</td><td>[[price_appreciation]]</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div>
+      <div class="col-label">Ownership Layers Framework</div>
+      <p class="body-text">[[ownership_layers]]</p>
+    </div>
+    <div>
+      <div class="col-label">Rent-Gap Analysis</div>
+      <p class="body-text">[[rent_gap_analysis]]</p>
+    </div>
+  </div>
+
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span><span>Private &amp; Confidential</span><span class="ft-date">[[date]]</span>
   </div>
@@ -167,7 +175,7 @@
   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
     <div>
       <div class="sec-kicker">Advanced Risk Assessment &amp; Value Determination</div>
-      <h2 style="font-family:var(--fh);font-size:22pt;font-weight:300;color:var(--cream);">Title Risk Index <em style="color:var(--gold);font-style:italic;">&amp; SR-IIT Valuation</em></h2>
+      <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:22pt; font-weight:300; color:#F5F5F0;">Title Risk Index <em style="color:#B7791F; font-style:italic;">&amp; SR-IIT Valuation</em></h2>
     </div>
   </div>
   <div class="divider"></div>
@@ -177,15 +185,15 @@
       <div class="col-label">Veto-Check: Binary Knockout Criteria</div>
       <div style="display:grid; grid-template-columns: 1fr; gap: 10px; margin-top: 16px;">
         <div style="display:flex; justify-content:space-between; padding: 10px; background: rgba(13,27,42,.6); border: 1px solid rgba(183,121,31,.1);">
-          <span style="font-family: var(--fb); font-size: 7pt; color: var(--muted);">Seismic Risk</span>
+          <span style="font-family: 'Montserrat', sans-serif; font-size: 7pt; color: #8A95A3;">Seismic Risk</span>
           <span class="badge badge-[[seismic_veto_class]]">[[seismic_veto]]</span>
         </div>
         <div style="display:flex; justify-content:space-between; padding: 10px; background: rgba(13,27,42,.6); border: 1px solid rgba(183,121,31,.1);">
-          <span style="font-family: var(--fb); font-size: 7pt; color: var(--muted);">Supreme Court</span>
+          <span style="font-family: 'Montserrat', sans-serif; font-size: 7pt; color: #8A95A3;">Supreme Court</span>
           <span class="badge badge-[[court_veto_class]]">[[court_veto]]</span>
         </div>
         <div style="display:flex; justify-content:space-between; padding: 10px; background: rgba(13,27,42,.6); border: 1px solid rgba(183,121,31,.1);">
-          <span style="font-family: var(--fb); font-size: 7pt; color: var(--muted);">Ownership Claims</span>
+          <span style="font-family: 'Montserrat', sans-serif; font-size: 7pt; color: #8A95A3;">Ownership Claims</span>
           <span class="badge badge-[[ownership_veto_class]]">[[ownership_veto]]</span>
         </div>
       </div>
@@ -199,17 +207,17 @@
         <tr><td>Intrinsic Value</td><td>[[v_intrinsic_str]]</td></tr>
         <tr><td>Arbitrage Margin</td><td>[[pi_risk_pct]]</td></tr>
         <tr style="background: rgba(183,121,31,.1);">
-          <td style="color:var(--gold); font-weight:700;">MAO Limit</td>
-          <td style="color:var(--gold); font-weight:700; font-size:9pt;">[[mao_str]]</td>
+          <td style="color:#B7791F; font-weight:700;">MAO Limit</td>
+          <td style="color:#B7791F; font-weight:700; font-size:9pt;">[[mao_str]]</td>
         </tr>
       </table>
       
       <div style="margin-top:24px;">
         <div class="col-label">Regulatory Impact</div>
         <div style="padding:12px; background:rgba(13,27,42,.5); border:1px solid rgba(183,121,31,.22); line-height:1.4;">
-          <div style="color: var(--red); font-size: 7pt; margin-bottom: 5px; font-weight: 600;">EVR PRIORITY: <span style="color: var(--muted); font-weight: normal;">[[evr_priority_status]]</span></div>
-          <div style="color: var(--amber); font-size: 7pt; margin-bottom: 5px; font-weight: 600;">BROWN DISCOUNT: <span style="color: var(--muted); font-weight: normal;">[[brown_discount_impact]]</span></div>
-          <div style="color: var(--gold); font-size: 7pt; font-weight: 600;">TAX REGIME: <span style="color: var(--muted); font-weight: normal;">[[tax_regime_warning]]</span></div>
+          <div style="color: #F87171; font-size: 7pt; margin-bottom: 5px; font-weight: 600;">EVR PRIORITY: <span style="color: #8A95A3; font-weight: normal;">[[evr_priority_status]]</span></div>
+          <div style="color: #F0C060; font-size: 7pt; margin-bottom: 5px; font-weight: 600;">BROWN DISCOUNT: <span style="color: #8A95A3; font-weight: normal;">[[brown_discount_impact]]</span></div>
+          <div style="color: #B7791F; font-size: 7pt; font-weight: 600;">TAX REGIME: <span style="color: #8A95A3; font-weight: normal;">[[tax_regime_warning]]</span></div>
         </div>
       </div>
     </div>
@@ -221,7 +229,7 @@
 
 <div class="page" id="p5">
   <div class="sec-kicker">Financial Analysis</div>
-  <h2 style="font-family:var(--fh);font-size:22pt;font-weight:300;color:var(--cream);">Financial Analysis <em style="color:var(--gold);font-style:italic;">&amp; Investment Recommendation</em></h2>
+  <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:22pt; font-weight:300; color:#F5F5F0;">Financial Analysis <em style="color:#B7791F; font-style:italic;">&amp; Investment Recommendation</em></h2>
   <div class="divider"></div>
 
   <div class="two-col">
@@ -239,15 +247,73 @@
     
     <div>
       <div class="col-label">Investment Decision</div>
-      <div style="background: rgba(13,27,42,.8); border: 1px solid rgba(183,121,31,.3); border-left: 3px solid var(--gold); padding: 22px;">
+      <div style="background: rgba(13,27,42,.8); border: 1px solid rgba(183,121,31,.3); border-left: 3px solid #B7791F; padding: 22px;">
         <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-          <div style="font-family: var(--fh); font-size: 13pt; color: var(--gold);">Verdict</div>
+          <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 13pt; color: #B7791F;">Verdict</div>
           <div class="badge [[deal_decision_class]]" style="font-size: 11pt; border-width: 2px;">[[deal_decision_text]]</div>
         </div>
         <div class="body-text">[[recommendation]]</div>
       </div>
     </div>
   </div>
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span><span>Private &amp; Confidential</span><span class="ft-date">[[date]]</span>
+  </div>
+</div>
+
+<div class="page" id="p6">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+    <div>
+      <div class="sec-kicker">Strategic Intelligence Report</div>
+      <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:22pt; font-weight:300; color:#F5F5F0;">Executive <em style="color:#B7791F; font-style:italic;">Narrative</em></h2>
+    </div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 12pt; font-weight: 300; color: rgba(245,245,240,.85); line-height: 1.9; font-style: italic;">
+    [[narrative_text]]
+  </p>
+
+  <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(183,121,31,.2); display: flex; flex-direction: column; align-items: flex-end;">
+    <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 14pt; font-weight: 400; color: #B7791F; font-style: italic;">Pietro Martini</div>
+    <div style="font-family: 'Montserrat', sans-serif; font-size: 6pt; letter-spacing: .22em; text-transform: uppercase; color: #8A95A3; margin-top: 4px;">Founder &amp; CEO · GT Global Estates &amp; Capital</div>
+  </div>
+
+  <div class="page-footer">
+    <span>GT Global Estates &amp; Capital</span><span>Private &amp; Confidential</span><span class="ft-date">[[date]]</span>
+  </div>
+</div>
+
+<div class="page" id="p7">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:36px;">
+    <div>
+      <div class="sec-kicker">Legal &amp; Compliance</div>
+      <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size:22pt; font-weight:300; color:#F5F5F0;">Legal Disclaimer <em style="color:#B7791F; font-style:italic;">&amp; Disclosures</em></h2>
+    </div>
+    <div class="logo-block">
+      <div class="logo-mark">G&amp;T</div>
+      <div class="logo-sub">Global Estates &amp; Capital</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div style="margin-bottom: 24px;">
+    <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 12pt; color: #B7791F; margin-bottom: 6px;">Limitation of Liability</div>
+    <p class="body-text">This report has been prepared by GT Global Estates &amp; Capital and is based on information available at the time of preparation. The analyses and recommendations constitute professional opinions and do not guarantee future performance or outcomes. GT Global Estates &amp; Capital assumes no liability for losses or damages arising from the use of this report.</p>
+  </div>
+  <div style="margin-bottom: 24px;">
+    <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 12pt; color: #B7791F; margin-bottom: 6px;">Confidentiality</div>
+    <p class="body-text">This document is confidential and intended solely for the named recipient ([[client_name]]). Redistribution, duplication, or publication without written authorization from GT Global Estates &amp; Capital is strictly prohibited.</p>
+  </div>
+  <div style="margin-bottom: 24px;">
+    <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 12pt; color: #B7791F; margin-bottom: 6px;">Methodological Foundation</div>
+    <p class="body-text">This assessment is grounded in the SR-IIT Value Formula and the TRI-Veto System, as developed by Pietro Martini (2026). Case studies are based on participatory observation; sample size (n=23) falls below requirements for parametric significance testing.</p>
+  </div>
+
   <div class="page-footer">
     <span>GT Global Estates &amp; Capital</span><span>Private &amp; Confidential</span><span class="ft-date">[[date]]</span>
   </div>
