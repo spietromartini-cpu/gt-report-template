@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link href="[https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700&display=swap](https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700&display=swap)" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   @page { size: A4; margin: 0mm; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -69,8 +69,8 @@
       <div style="font-family: 'Cormorant Garamond', serif; font-size: 34pt;">[[price]]</div>
     </div>
     <div style="background: rgba(13,27,42,0.6); border: 1px solid rgba(183,121,31,0.2); padding: 26px;">
-      <div class="col-label">ROI</div>
-      <div style="font-family: 'Cormorant Garamond', serif; font-size: 34pt; color: #B7791F;">[[roi]]</div>
+      <div class="col-label" style="text-transform: uppercase;">[[return_label]]</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 34pt; color: #B7791F;">[[return_value]]</div>
     </div>
   </div>
   <div style="margin-top:28px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
@@ -178,7 +178,7 @@
         <tr><td>Equity / Own Capital</td><td>[[equity]]</td></tr>
         <tr><td>Loan Term</td><td>[[loan_years_str]]</td></tr>
         <tr><td>Monthly Rent Estimate</td><td>[[monthly_rent]]</td></tr>
-        <tr><td>ROI</td><td style="color:#B7791F; font-weight:600;">[[roi]]</td></tr>
+        <tr style="text-transform: uppercase;"><td>[[return_label]]</td><td style="color:#B7791F; font-weight:600;">[[return_value]]</td></tr>
         <tr><td>CoC Return (Est.)</td><td>[[coc_return]]</td></tr>
       </table>
     </div>
