@@ -18,16 +18,17 @@ app = Flask(__name__)
 
 API_KEY = os.environ.get("API_KEY")
 
+
 class InvestmentReportGenerator:
     """
-    Generates institutional PDF investment reports.
-    Placeholders use [[key]] syntax — replace from Make.com / Gemini AI data.
+    GT Global Estates — SR-IIT v2.1 PDF Generator
+    Placeholders: [[key]] syntax. Replaced from Gemini AI / Make.com data.
     """
 
     def __init__(self, template_path: str):
-        self.template_path = template_path
+        self.template_path    = template_path
         self.template_content = self._load_template()
-        self.base_url = str(Path(template_path).parent.resolve())
+        self.base_url         = str(Path(template_path).parent.resolve())
 
     def _load_template(self) -> str:
         try:
@@ -38,10 +39,13 @@ class InvestmentReportGenerator:
 
     def generate_pdf_bytes(self, data: dict) -> io.BytesIO:
         html_content = self.template_content
+
+        # Replace all [[placeholders]] with data values
         for key, value in data.items():
-            placeholder = "[[" + key + "]]"
+            placeholder  = "[[" + key + "]]"
             html_content = html_content.replace(placeholder, str(value))
 
+        # Warn about any remaining unreplaced placeholders
         remaining = re.findall(r'\[\[(.*?)\]\]', html_content)
         if remaining:
             print(f"Warning — unreplaced placeholders: {remaining}")
@@ -54,187 +58,263 @@ class InvestmentReportGenerator:
     @staticmethod
     def compute_derived_fields(data: dict) -> dict:
 
-        # ── Investor profile badge ──────────────────────────────────────────
+        # ── 1. Investor profile ─────────────────────────────────────────────
         profile = data.get("investorProfile", "retail")
         data["investor_profile_class"] = "profile-retail" if profile == "retail" else "profile-inst"
         data["investor_profile_label"] = "Private Investor" if profile == "retail" else "Institutional Investor"
 
-        # ── Strategy label
-        # FIX: Only compute if Gemini did NOT already send strategy_label
-        if not data.get("strategy_label"):
-            strategy_map = {
-                "rent":  ("Buy & Rent",  "Cash flow via rental income"),
-                "hold":  ("Buy & Hold",  "Long-term capital appreciation"),
-                "sell":  ("Buy & Sell",  "Value-add resale strategy"),
-                "flip":  ("Fix & Flip",  "Short-term renovation arbitrage"),
-            }
-            strat = data.get("strategy", "rent")
-            data["strategy_label"] = strategy_map.get(strat, ("—", "—"))[0]
-            data["strategy_sub"]   = strategy_map.get(strat, ("—", "—"))[1]
+        # ── 2. Strategy label — force English formatted label ───────────────
+        raw_strategy  = str(data.get("strategy", "rent")).lower().strip()
+        current_label = str(data.get("strategy_label", "")).strip()
+        raw_values    = {"rent", "hold", "sell", "flip", ""}
 
-        # ── TRI score bar percentage ────────────────────────────────────────
+        if not current_label or current_label.lower() in raw_values:
+            strategy_map = {
+                "rent": "Buy & Rent",
+                "hold": "Buy & Hold",
+                "sell": "Buy & Sell",
+                "flip": "Fix & Flip",
+            }
+            data["strategy_label"] = strategy_map.get(raw_strategy, "Buy & Rent")
+            data["strategy_sub"] = {
+                "rent": "Cash flow via rental income",
+                "hold": "Long-term capital appreciation",
+                "sell": "Value-add resale strategy",
+                "flip": "Short-term renovation arbitrage",
+            }.get(raw_strategy, "—")
+
+        # ── 3. Country — force English ──────────────────────────────────────
+        country_map = {
+            "rumänien":   "Romania",
+            "rumaenien":  "Romania",
+            "romania":    "Romania",
+            "deutschland": "Germany",
+            "germany":    "Germany",
+            "österreich": "Austria",
+            "austria":    "Austria",
+            "ungarn":     "Hungary",
+            "hungary":    "Hungary",
+            "frankreich": "France",
+            "france":     "France",
+            "italien":    "Italy",
+            "italy":      "Italy",
+            "spanien":    "Spain",
+            "spain":      "Spain",
+            "schweiz":    "Switzerland",
+            "switzerland": "Switzerland",
+        }
+        raw_country    = str(data.get("country", "")).strip()
+        data["country"] = country_map.get(raw_country.lower(), raw_country)
+
+        # ── 4. TRI score bar ────────────────────────────────────────────────
         try:
             tri_raw = float(str(data.get("tri_score", "5")).replace(",", "."))
             data["tri_score_pct"] = round(tri_raw * 10)
-        except:
+        except Exception:
             data["tri_score_pct"] = 50
 
-        # ── GRI bar percentages ─────────────────────────────────────────────
+        # ── 5. GRI bar percentages ──────────────────────────────────────────
         for gri_key in ["gri_conflict", "gri_fiscal", "gri_exit", "gri_composite"]:
             try:
                 val = float(str(data.get(gri_key, "3.8")).replace(",", "."))
                 data[gri_key + "_pct"] = round(min(max(val * 10, 5), 100))
-            except:
+            except Exception:
                 data[gri_key + "_pct"] = 38
 
-        # ── Veto warning block HTML ─────────────────────────────────────────
-        seismic_class   = str(data.get("seismic_veto_class", "ok"))
-        court_class     = str(data.get("court_veto_class", "ok"))
+        # ── 6. Veto warning block HTML ──────────────────────────────────────
+        seismic_class   = str(data.get("seismic_veto_class",   "ok"))
+        court_class     = str(data.get("court_veto_class",     "ok"))
         ownership_class = str(data.get("ownership_veto_class", "ok"))
 
         if "alert" in (seismic_class, court_class, ownership_class):
-            data["veto_warning_block"] = """
-<div style="background:rgba(183,21,21,.1);border:1px solid rgba(248,113,113,.4);
-     border-left:3px solid #f87171;padding:16px 20px;margin-bottom:20px;">
-  <div style="font-family:'Montserrat',sans-serif;font-size:6.5pt;font-weight:700;
-       letter-spacing:.2em;text-transform:uppercase;color:#f87171;margin-bottom:8px;">
-    ⛔ &nbsp; Critical Asset Warning
-  </div>
-  <div style="font-family:'Montserrat',sans-serif;font-size:7.5pt;font-weight:300;
-       color:rgba(248,180,150,.9);line-height:1.7;">
-    Initial due diligence reveals structural or juridical parameters that constitute
-    binary knockout criteria. Review all veto flags before proceeding with capital allocation.
-  </div>
-</div>"""
+            data["veto_warning_block"] = (
+                '<div style="background:rgba(183,21,21,.1);border:1px solid rgba(248,113,113,.4);'
+                'border-left:3px solid #f87171;padding:16px 20px;margin-bottom:20px;">'
+                '<div style="font-family:\'Montserrat\',sans-serif;font-size:6.5pt;font-weight:700;'
+                'letter-spacing:.2em;text-transform:uppercase;color:#f87171;margin-bottom:8px;">'
+                '&#9940;&nbsp; Critical Asset Warning</div>'
+                '<div style="font-family:\'Montserrat\',sans-serif;font-size:7.5pt;font-weight:300;'
+                'color:rgba(248,180,150,.9);line-height:1.7;">'
+                'Initial due diligence reveals structural or juridical parameters that constitute '
+                'binary knockout criteria. Review all veto flags before proceeding with capital allocation.'
+                '</div></div>'
+            )
         else:
             data["veto_warning_block"] = ""
 
-        # ── Format currency fields ──────────────────────────────────────────
-        def fmt_eur(val, key_out):
+        # ── 7. Currency formatting ──────────────────────────────────────────
+        def fmt_eur(src_key, dst_key):
             try:
-                v = float(str(data.get(val, 0)).replace(",", ".").replace("€","").replace(" ",""))
-                data[key_out] = f"€ {v:,.0f}".replace(",", ".")
-            except:
-                data[key_out] = data.get(val, "—")
+                raw = str(data.get(src_key, 0))
+                raw = raw.replace("EUR", "").replace("€", "").replace(" ", "")
+                # Handle dot-as-thousands-separator (e.g. 500.000 → 500000)
+                if raw.count(".") == 1 and len(raw.split(".")[1]) == 3:
+                    raw = raw.replace(".", "")
+                elif raw.count(".") > 1:
+                    raw = raw.replace(".", "", raw.count(".") - 1)
+                raw = raw.replace(",", ".")
+                v = float(raw)
+                data[dst_key] = "EUR {:,.0f}".format(v).replace(",", ".")
+            except Exception:
+                data[dst_key] = data.get(src_key, "—")
 
         fmt_eur("ancillaryCosts", "ancillary_costs")
         fmt_eur("monthlyRent",    "monthly_rent")
         fmt_eur("managementCost", "management_cost")
-        # FIX: Only format price/equity from raw fields if Gemini did NOT send them already
-        if not data.get("price"):
+
+        if not data.get("price") or str(data.get("price", "")).strip() in ("", "0"):
             fmt_eur("price", "price")
-        if not data.get("equity"):
+        if not data.get("equity") or str(data.get("equity", "")).strip() in ("", "0"):
             fmt_eur("equity", "equity")
 
-        # ── Percent fields ──────────────────────────────────────────────────
+        # ── 8. Percent fields ───────────────────────────────────────────────
         def fmt_pct(src, dst, suffix="%"):
             try:
-                v = float(str(data.get(src, 0)).replace("%","").replace(",","."))
+                v = float(str(data.get(src, 0)).replace("%", "").replace(",", ".").strip())
                 data[dst] = f"{v:.1f} {suffix}"
-            except:
+            except Exception:
                 data[dst] = data.get(src, "—")
 
         fmt_pct("interestRate", "interest_rate", "% p.a.")
         fmt_pct("vacancyRate",  "vacancy_rate_asset", "%")
 
-        # ── Pass-through fields ─────────────────────────────────────────────
+        # ── 9. Pass-through — all Gemini SR-IIT output fields ───────────────
         passthrough = {
-            "city":            "city",
-            "country":         "country",
-            "district":        "district",
-            "address":         "address",
-            "assetType":       "asset_type",
-            "seismic":         "seismic_class",
-            "legal":           "legal_status",
-            "taxResidency":    "tax_residency",
-            "griConflict":     "gri_conflict",
-            "griFiscal":       "gri_fiscal",
-            "griExit":         "gri_exit",
-            "griComposite":    "gri_composite",
-            "grAdjPct":        "gr_adj_pct",
-            "name":            "client_name",
-            # FIX: New SR-IIT fields — pass through from Gemini output
-            "deal_decision_badge": "deal_decision_badge",
-            "deal_decision_box":   "deal_decision_box",
-            "deal_decision_text":  "deal_decision_text",
-            "v_base_str":          "v_base_str",
-            "v_intrinsic_str":     "v_intrinsic_str",
-            "mao_str":             "mao_str",
-            "pi_risk_pct":         "pi_risk_pct",
-            "evr_priority_status": "evr_priority_status",
+            "city":                  "city",
+            "country":               "country",
+            "district":              "district",
+            "address":               "address",
+            "assetType":             "asset_type",
+            "name":                  "client_name",
+            "seismic":               "seismic_class",
+            "legal":                 "legal_status",
+            "taxResidency":          "tax_residency",
+            "griConflict":           "gri_conflict",
+            "griFiscal":             "gri_fiscal",
+            "griExit":               "gri_exit",
+            "griComposite":          "gri_composite",
+            "grAdjPct":              "gr_adj_pct",
+            # Decision — badge and box are intentionally SEPARATE
+            "deal_decision_badge":   "deal_decision_badge",
+            "deal_decision_box":     "deal_decision_box",
+            "deal_decision_text":    "deal_decision_text",
+            # SR-IIT valuation
+            "v_base_str":            "v_base_str",
+            "v_intrinsic_str":       "v_intrinsic_str",
+            "mao_str":               "mao_str",
+            "pi_risk_pct":           "pi_risk_pct",
+            # Veto checks
+            "seismic_veto":          "seismic_veto",
+            "seismic_veto_class":    "seismic_veto_class",
+            "court_veto":            "court_veto",
+            "court_veto_class":      "court_veto_class",
+            "ownership_veto":        "ownership_veto",
+            "ownership_veto_class":  "ownership_veto_class",
+            "tri_veto_logic":        "tri_veto_logic",
+            # Regulatory
+            "evr_priority_status":   "evr_priority_status",
             "brown_discount_impact": "brown_discount_impact",
-            "tax_regime_warning":  "tax_regime_warning",
-            "tri_veto_logic":      "tri_veto_logic",
-            "seismic_veto":        "seismic_veto",
-            "seismic_veto_class":  "seismic_veto_class",
-            "court_veto":          "court_veto",
-            "court_veto_class":    "court_veto_class",
-            "ownership_veto":      "ownership_veto",
-            "ownership_veto_class":"ownership_veto_class",
-            "macro_analysis":      "macro_analysis",
-            "ownership_layers":    "ownership_layers",
-            "rent_gap_analysis":   "rent_gap_analysis",
-            "recommendation":      "recommendation",
-            "narrative_text":      "narrative_text",
-            "gdp_growth":          "gdp_growth",
-            "unemployment":        "unemployment",
-            "vacancy_rate":        "vacancy_rate",
-            "price_appreciation":  "price_appreciation",
-            "return_label":        "return_label",
-            "return_value":        "return_value",
-            "coc_return":          "coc_return",
-            "loan_years_str":      "loan_years_str",
+            "tax_regime_warning":    "tax_regime_warning",
+            # Analysis text
+            "macro_analysis":        "macro_analysis",
+            "ownership_layers":      "ownership_layers",
+            "rent_gap_analysis":     "rent_gap_analysis",
+            "recommendation":        "recommendation",
+            "narrative_text":        "narrative_text",
+            # Market indicators
+            "gdp_growth":            "gdp_growth",
+            "unemployment":          "unemployment",
+            "vacancy_rate":          "vacancy_rate",
+            "price_appreciation":    "price_appreciation",
+            # Financial
+            "return_label":          "return_label",
+            "return_value":          "return_value",
+            "net_yield":             "net_yield",
+            "coc_return":            "coc_return",
+            "loan_years_str":        "loan_years_str",
             "monthly_rent_estimate": "monthly_rent_estimate",
         }
         for src, dst in passthrough.items():
-            if dst not in data:
-                data[dst] = data.get(src, "—")
+            if dst not in data or not data.get(dst):
+                val = data.get(src, "")
+                data[dst] = val if val else "—"
 
-        # ── Date ────────────────────────────────────────────────────────────
-        # FIX: Only set date if Gemini did NOT already send one
-        if not data.get("date"):
-            data["date"] = datetime.now().strftime("%d. %B %Y")
+        # ── 10. Date — always clean English format ───────────────────────────
+        raw_date = str(data.get("date", "")).strip()
+        if not raw_date or re.match(r'^\d{4}-\d{2}-\d{2}$', raw_date) or raw_date == "—":
+            data["date"] = datetime.now().strftime("%-d. %B %Y")
 
-        # ── Property name ───────────────────────────────────────────────────
-        # FIX: Only compute if Gemini did NOT already send property_name
-        if not data.get("property_name"):
-            city  = data.get("city", "—")
-            asset = data.get("asset_type", data.get("assetType", "—"))
-            data["property_name"] = f"{city} — {asset}"
+        # ── 11. Property name ────────────────────────────────────────────────
+        pn = str(data.get("property_name", "")).strip()
+        if not pn or pn == "—":
+            city = data.get("city", "—")
+            data["property_name"] = f"GT Investment Asset - {city}"
 
-        # ── Usable area ─────────────────────────────────────────────────────
-        data["usable_area"] = f"{data.get('area', '—')} m²"
+        # ── 12. Usable area ──────────────────────────────────────────────────
+        area = data.get("area", "")
+        data["usable_area"] = f"{area} m\u00b2" if area else "—"
 
-        # ── Financial metrics ───────────────────────────────────────────────
-        # FIX: Only compute if Gemini did NOT already calculate net_yield
-        if not data.get("net_yield") or data.get("net_yield") == "—":
+        # ── 13. Net yield fallback ───────────────────────────────────────────
+        ny = str(data.get("net_yield", "")).strip()
+        if not ny or ny == "—":
             try:
-                raw_price = str(data.get("price", "0")).replace("€","").replace(".","").replace(" ","").replace(",",".")
-                price_raw = float(raw_price)
-                rent_raw  = float(str(data.get("monthlyRent", "0")).replace(",","."))
-                mgmt_raw  = float(str(data.get("managementCost", "0")).replace(",","."))
+                raw_p = re.sub(r'[^\d]', '', str(data.get("price", "0")).split(".")[0])
+                price_f = float(raw_p) if raw_p else 0
+                rent_f  = float(str(data.get("monthlyRent", "0")).replace(",", "."))
+                mgmt_f  = float(str(data.get("managementCost", "0")).replace(",", "."))
+                if price_f > 0:
+                    net_y = round((rent_f * 12) / price_f * 100, 2)
+                    cap_r = round(((rent_f - mgmt_f) * 12) / price_f * 100, 2)
+                    data["net_yield"] = f"{net_y:.2f}%"
+                    data["cap_rate"]  = f"{cap_r:.2f}%"
+                    data["yield"]     = f"{net_y:.2f}%"
+            except Exception:
+                pass
 
-                net_y = round((rent_raw * 12) / price_raw * 100, 2) if price_raw > 0 else 0
-                cap_r = round(((rent_raw - mgmt_raw) * 12) / price_raw * 100, 2) if price_raw > 0 else 0
-
-                data["net_yield"] = f"{net_y:.2f}%"
-                data["cap_rate"]  = f"{cap_r:.2f}%"
-                data["yield"]     = f"{net_y:.2f}%"
-            except:
-                data["net_yield"] = "—"
-                data["cap_rate"]  = "—"
-                data["yield"]     = "—"
-
-        # ── Fallbacks ───────────────────────────────────────────────────────
-        data.setdefault("coc_return",     "—")
-        data.setdefault("irr_projection", "—")
-        data.setdefault("net_yield",      "—")
-        data.setdefault("cap_rate",       "—")
+        # ── 14. Final fallbacks ──────────────────────────────────────────────
+        defaults = {
+            "net_yield":             "—",
+            "cap_rate":              "—",
+            "coc_return":            "—",
+            "irr_projection":        "—",
+            "monthly_rent_estimate": "—",
+            "loan_years_str":        "—",
+            "deal_decision_text":    "PROCEED",
+            "deal_decision_badge":   "badge-ok",
+            "deal_decision_box":     "proceed-box",
+            "v_base_str":            "—",
+            "v_intrinsic_str":       "—",
+            "mao_str":               "—",
+            "pi_risk_pct":           "—",
+            "evr_priority_status":   "—",
+            "brown_discount_impact": "—",
+            "tax_regime_warning":    "—",
+            "seismic_veto":          "CLEAR",
+            "seismic_veto_class":    "ok",
+            "court_veto":            "CLEAR",
+            "court_veto_class":      "ok",
+            "ownership_veto":        "CLEAR",
+            "ownership_veto_class":  "ok",
+            "tri_veto_logic":        "—",
+            "macro_analysis":        "—",
+            "ownership_layers":      "—",
+            "rent_gap_analysis":     "—",
+            "recommendation":        "—",
+            "narrative_text":        "—",
+            "gdp_growth":            "1.8%",
+            "unemployment":          "5.4%",
+            "vacancy_rate":          "—",
+            "price_appreciation":    "—",
+            "return_label":          "GROSS YIELD",
+            "return_value":          "—",
+        }
+        for key, fallback in defaults.items():
+            data.setdefault(key, fallback)
 
         return data
 
 
-# ── Server setup ─────────────────────────────────────────────────────────────
+# ── Server setup ──────────────────────────────────────────────────────────────
 base_dir      = Path(__file__).parent
 template_path = str(base_dir / "investment_report_en.html")
 
@@ -245,11 +325,12 @@ except Exception as e:
     generator = None
 
 
-# ── API Endpoints ─────────────────────────────────────────────────────────────
+# ── API endpoints ─────────────────────────────────────────────────────────────
 
 @app.route('/', methods=['GET'])
 def health_check():
-    return "GT PDF Server is LIVE and ready to accept requests from Make.com!"
+    return "GT PDF Server - SR-IIT v2.1 - LIVE"
+
 
 @app.route('/generate-pdf', methods=['POST'])
 def generate_pdf_endpoint():
@@ -268,11 +349,11 @@ def generate_pdf_endpoint():
         return send_file(
             pdf_file,
             download_name="GT_Investment_Report.pdf",
-            mimetype='application/pdf'
+            mimetype="application/pdf"
         )
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host="0.0.0.0", port=5000)
