@@ -40,12 +40,10 @@ class InvestmentReportGenerator:
     def generate_pdf_bytes(self, data: dict) -> io.BytesIO:
         html_content = self.template_content
 
-        # Replace all [[placeholders]] with data values
         for key, value in data.items():
             placeholder  = "[[" + key + "]]"
             html_content = html_content.replace(placeholder, str(value))
 
-        # Warn about any remaining unreplaced placeholders
         remaining = re.findall(r'\[\[(.*?)\]\]', html_content)
         if remaining:
             print(f"Warning — unreplaced placeholders: {remaining}")
@@ -63,7 +61,7 @@ class InvestmentReportGenerator:
         data["investor_profile_class"] = "profile-retail" if profile == "retail" else "profile-inst"
         data["investor_profile_label"] = "Private Investor" if profile == "retail" else "Institutional Investor"
 
-        # ── 2. Strategy label — force English formatted label ───────────────
+        # ── 2. Strategy label — always force English formatted label ────────
         raw_strategy  = str(data.get("strategy", "rent")).lower().strip()
         current_label = str(data.get("strategy_label", "")).strip()
         raw_values    = {"rent", "hold", "sell", "flip", ""}
@@ -83,27 +81,27 @@ class InvestmentReportGenerator:
                 "flip": "Short-term renovation arbitrage",
             }.get(raw_strategy, "—")
 
-        # ── 3. Country — force English ──────────────────────────────────────
+        # ── 3. Country — always force English ───────────────────────────────
         country_map = {
-            "rumänien":   "Romania",
-            "rumaenien":  "Romania",
-            "romania":    "Romania",
+            "rumänien":    "Romania",
+            "rumaenien":   "Romania",
+            "romania":     "Romania",
             "deutschland": "Germany",
-            "germany":    "Germany",
-            "österreich": "Austria",
-            "austria":    "Austria",
-            "ungarn":     "Hungary",
-            "hungary":    "Hungary",
-            "frankreich": "France",
-            "france":     "France",
-            "italien":    "Italy",
-            "italy":      "Italy",
-            "spanien":    "Spain",
-            "spain":      "Spain",
-            "schweiz":    "Switzerland",
+            "germany":     "Germany",
+            "österreich":  "Austria",
+            "austria":     "Austria",
+            "ungarn":      "Hungary",
+            "hungary":     "Hungary",
+            "frankreich":  "France",
+            "france":      "France",
+            "italien":     "Italy",
+            "italy":       "Italy",
+            "spanien":     "Spain",
+            "spain":       "Spain",
+            "schweiz":     "Switzerland",
             "switzerland": "Switzerland",
         }
-        raw_country    = str(data.get("country", "")).strip()
+        raw_country     = str(data.get("country", "Romania")).strip()
         data["country"] = country_map.get(raw_country.lower(), raw_country)
 
         # ── 4. TRI score bar ────────────────────────────────────────────────
@@ -142,30 +140,32 @@ class InvestmentReportGenerator:
         else:
             data["veto_warning_block"] = ""
 
-        # ── 7. Currency formatting ──────────────────────────────────────────
+        # ── 7. Currency formatting — ALWAYS reformat regardless of input ────
         def fmt_eur(src_key, dst_key):
             try:
-                raw = str(data.get(src_key, 0))
+                raw = str(data.get(src_key, "0"))
+                # Strip all non-numeric except dot and comma
                 raw = raw.replace("EUR", "").replace("€", "").replace(" ", "")
-                # Handle dot-as-thousands-separator (e.g. 500.000 → 500000)
-                if raw.count(".") == 1 and len(raw.split(".")[1]) == 3:
+                # Handle dot-as-thousands-separator: 876.576 → 876576
+                # Rule: if dot appears and digits after last dot = 3 → thousands sep
+                parts = raw.split(".")
+                if len(parts) > 1 and len(parts[-1]) == 3:
                     raw = raw.replace(".", "")
-                elif raw.count(".") > 1:
-                    raw = raw.replace(".", "", raw.count(".") - 1)
+                elif len(parts) > 2:
+                    # Multiple dots — all are thousands separators
+                    raw = raw.replace(".", "")
                 raw = raw.replace(",", ".")
-                v = float(raw)
+                v = float(raw) if raw else 0
                 data[dst_key] = "EUR {:,.0f}".format(v).replace(",", ".")
             except Exception:
                 data[dst_key] = data.get(src_key, "—")
 
+        # Always reformat these — no conditions
+        fmt_eur("price",          "price")
+        fmt_eur("equity",         "equity")
         fmt_eur("ancillaryCosts", "ancillary_costs")
         fmt_eur("monthlyRent",    "monthly_rent")
         fmt_eur("managementCost", "management_cost")
-
-        if not data.get("price") or str(data.get("price", "")).strip() in ("", "0"):
-            fmt_eur("price", "price")
-        if not data.get("equity") or str(data.get("equity", "")).strip() in ("", "0"):
-            fmt_eur("equity", "equity")
 
         # ── 8. Percent fields ───────────────────────────────────────────────
         def fmt_pct(src, dst, suffix="%"):
@@ -178,7 +178,16 @@ class InvestmentReportGenerator:
         fmt_pct("interestRate", "interest_rate", "% p.a.")
         fmt_pct("vacancyRate",  "vacancy_rate_asset", "%")
 
-        # ── 9. Pass-through — all Gemini SR-IIT output fields ───────────────
+        # ── 9. Decision box — inline border color (WeasyPrint CSS fix) ──────
+        box = data.get("deal_decision_box", "proceed-box")
+        color_map = {
+            "proceed-box": "rgba(74,222,128,0.6)",
+            "caution-box": "rgba(251,191,36,0.6)",
+            "veto-box":    "rgba(248,113,113,0.6)",
+        }
+        data["decision_border_color"] = color_map.get(box, "rgba(183,121,31,0.4)")
+
+        # ── 10. Pass-through — all Gemini SR-IIT output fields ──────────────
         passthrough = {
             "city":                  "city",
             "country":               "country",
@@ -194,16 +203,13 @@ class InvestmentReportGenerator:
             "griExit":               "gri_exit",
             "griComposite":          "gri_composite",
             "grAdjPct":              "gr_adj_pct",
-            # Decision — badge and box are intentionally SEPARATE
             "deal_decision_badge":   "deal_decision_badge",
             "deal_decision_box":     "deal_decision_box",
             "deal_decision_text":    "deal_decision_text",
-            # SR-IIT valuation
             "v_base_str":            "v_base_str",
             "v_intrinsic_str":       "v_intrinsic_str",
             "mao_str":               "mao_str",
             "pi_risk_pct":           "pi_risk_pct",
-            # Veto checks
             "seismic_veto":          "seismic_veto",
             "seismic_veto_class":    "seismic_veto_class",
             "court_veto":            "court_veto",
@@ -211,22 +217,18 @@ class InvestmentReportGenerator:
             "ownership_veto":        "ownership_veto",
             "ownership_veto_class":  "ownership_veto_class",
             "tri_veto_logic":        "tri_veto_logic",
-            # Regulatory
             "evr_priority_status":   "evr_priority_status",
             "brown_discount_impact": "brown_discount_impact",
             "tax_regime_warning":    "tax_regime_warning",
-            # Analysis text
             "macro_analysis":        "macro_analysis",
             "ownership_layers":      "ownership_layers",
             "rent_gap_analysis":     "rent_gap_analysis",
             "recommendation":        "recommendation",
             "narrative_text":        "narrative_text",
-            # Market indicators
             "gdp_growth":            "gdp_growth",
             "unemployment":          "unemployment",
             "vacancy_rate":          "vacancy_rate",
             "price_appreciation":    "price_appreciation",
-            # Financial
             "return_label":          "return_label",
             "return_value":          "return_value",
             "net_yield":             "net_yield",
@@ -239,26 +241,25 @@ class InvestmentReportGenerator:
                 val = data.get(src, "")
                 data[dst] = val if val else "—"
 
-        # ── 10. Date — always clean English format ───────────────────────────
-        raw_date = str(data.get("date", "")).strip()
-        if not raw_date or re.match(r'^\d{4}-\d{2}-\d{2}$', raw_date) or raw_date == "—":
-            data["date"] = datetime.now().strftime("%-d. %B %Y")
+        # ── 11. Date — ALWAYS set from Python, never trust Gemini ───────────
+        data["date"] = datetime.now().strftime("%-d. %B %Y")
 
-        # ── 11. Property name ────────────────────────────────────────────────
+        # ── 12. Property name ────────────────────────────────────────────────
         pn = str(data.get("property_name", "")).strip()
         if not pn or pn == "—":
             city = data.get("city", "—")
             data["property_name"] = f"GT Investment Asset - {city}"
 
-        # ── 12. Usable area ──────────────────────────────────────────────────
+        # ── 13. Usable area ──────────────────────────────────────────────────
         area = data.get("area", "")
         data["usable_area"] = f"{area} m\u00b2" if area else "—"
 
-        # ── 13. Net yield fallback ───────────────────────────────────────────
+        # ── 14. Net yield fallback ───────────────────────────────────────────
         ny = str(data.get("net_yield", "")).strip()
         if not ny or ny == "—":
             try:
-                raw_p = re.sub(r'[^\d]', '', str(data.get("price", "0")).split(".")[0])
+                raw_p = str(data.get("price", "0"))
+                raw_p = re.sub(r'[^\d]', '', raw_p.split(".")[0])
                 price_f = float(raw_p) if raw_p else 0
                 rent_f  = float(str(data.get("monthlyRent", "0")).replace(",", "."))
                 mgmt_f  = float(str(data.get("managementCost", "0")).replace(",", "."))
@@ -271,7 +272,7 @@ class InvestmentReportGenerator:
             except Exception:
                 pass
 
-        # ── 14. Final fallbacks ──────────────────────────────────────────────
+        # ── 15. Final fallbacks ──────────────────────────────────────────────
         defaults = {
             "net_yield":             "—",
             "cap_rate":              "—",
@@ -282,6 +283,7 @@ class InvestmentReportGenerator:
             "deal_decision_text":    "PROCEED",
             "deal_decision_badge":   "badge-ok",
             "deal_decision_box":     "proceed-box",
+            "decision_border_color": "rgba(74,222,128,0.6)",
             "v_base_str":            "—",
             "v_intrinsic_str":       "—",
             "mao_str":               "—",
