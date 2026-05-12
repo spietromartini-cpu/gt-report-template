@@ -8,11 +8,11 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Montserrat', sans-serif; background-color: #0D1B2A; color: #F5F5F0; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-  .page { width: 210mm; height: 296mm; background-color: #0D1B2A; position: relative; page-break-after: always; padding: 48px; overflow: hidden; }
+  .page      { width: 210mm; height: 296mm; background-color: #0D1B2A; position: relative; page-break-after: always; padding: 48px; overflow: hidden; }
   .page-dark { background-color: #0A1520; }
 
-  .divider { width: 100%; height: 1px; background: #B7791F; opacity: 0.35; margin: 25px 0; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .divider  { width: 100%; height: 1px; background: #B7791F; opacity: 0.35; margin: 25px 0; }
+  .two-col  { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
 
   .col-label { font-size: 6.5pt; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #B7791F; margin-bottom: 12px; }
   .body-text { font-size: 8pt; font-weight: 300; color: rgba(245,245,240,0.85); line-height: 1.85; }
@@ -20,18 +20,13 @@
   .data-table { width: 100%; border-collapse: collapse; }
   .data-table td { padding: 9px 0; border-bottom: 1px solid rgba(183,121,31,0.12); font-size: 8pt; }
   .data-table td:first-child { color: #B7791F; font-weight: 600; text-transform: uppercase; font-size: 6.5pt; letter-spacing: 0.08em; }
-  .data-table td:last-child { text-align: right; color: #F5F5F0; font-weight: 400; }
+  .data-table td:last-child  { text-align: right; color: #F5F5F0; font-weight: 400; }
 
   /* ── BADGE CLASSES ── */
-  .badge { display: inline-block; padding: 6px 16px; font-weight: 700; border-radius: 2px; text-transform: uppercase; font-size: 7pt; letter-spacing: 0.15em; }
-  .badge-ok    { background: rgba(74,222,128,0.1);  color: #4ADE80; border: 1px solid rgba(74,222,128,0.3); }
-  .badge-alert { background: rgba(248,113,113,0.1); color: #F87171; border: 1px solid rgba(248,113,113,0.3); }
-  .badge-warn  { background: rgba(251,191,36,0.1);  color: #FBB324; border: 1px solid rgba(251,191,36,0.3); }
-
-  /* ── DECISION BOX CLASSES — Page 2 outer container border colour ── */
-  .proceed-box { border-color: rgba(74,222,128,0.5)  !important; color: #4ADE80; }
-  .caution-box { border-color: rgba(251,191,36,0.5)  !important; color: #FBB324; }
-  .veto-box    { border-color: rgba(248,113,113,0.5) !important; color: #F87171; }
+  .badge        { display: inline-block; padding: 6px 16px; font-weight: 700; border-radius: 2px; text-transform: uppercase; font-size: 7pt; letter-spacing: 0.15em; }
+  .badge-ok     { background: rgba(74,222,128,0.1);  color: #4ADE80; border: 1px solid rgba(74,222,128,0.3); }
+  .badge-warn   { background: rgba(251,191,36,0.1);  color: #FBB324; border: 1px solid rgba(251,191,36,0.3); }
+  .badge-alert  { background: rgba(248,113,113,0.1); color: #F87171; border: 1px solid rgba(248,113,113,0.3); }
 
   .footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 48px; border-top: 1px solid rgba(183,121,31,0.15); display: flex; justify-content: space-between; font-size: 6.5pt; color: #8A95A3; text-transform: uppercase; letter-spacing: 0.2em; background: rgba(9,14,22,0.6); }
 </style>
@@ -65,8 +60,9 @@
       <div class="col-label" style="margin-bottom:12px;">EXECUTIVE SUMMARY</div>
       <h2 style="font-family:'Cormorant Garamond',serif; font-size:34pt; font-weight:300; line-height:1.05;">Strategic Market<br><span style="color:#B7791F; font-style:italic;">Intelligence</span></h2>
     </div>
-    <!-- [[deal_decision_box]] = proceed-box / caution-box / veto-box → controls BORDER COLOUR -->
-    <div style="text-align:center; border:2px solid; border-radius:2px; padding:18px; min-width:190px; background:rgba(13,27,42,0.8);" class="[[deal_decision_box]]">
+    <!-- Border colour set via [[decision_border_color]] — computed in app.py -->
+    <!-- This avoids WeasyPrint CSS specificity issues with !important on classes -->
+    <div style="text-align:center; border:2px solid [[decision_border_color]]; border-radius:2px; padding:18px; min-width:190px; background:rgba(13,27,42,0.8);">
       <div style="font-size:6.5pt; font-weight:700; color:#8A95A3; letter-spacing:0.2em; margin-bottom:8px;">RECOMMENDATION</div>
       <div style="font-family:'Cormorant Garamond',serif; font-size:40pt; line-height:1; margin-bottom:6px;">[[deal_decision_text]]</div>
       <div style="font-size:5.5pt; font-weight:600; text-transform:uppercase; opacity:0.8; letter-spacing:0.1em;">Verified by SR-IIT</div>
@@ -143,18 +139,25 @@
     <div>
       <div class="col-label">Veto-Check: Binary Knockout Criteria</div>
       <div style="display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px;">
+
+        <!-- SEISMIC: badge-ok / badge-warn / badge-alert -->
         <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(13,27,42,0.6); border:1px solid rgba(183,121,31,0.15);">
           <span style="font-size:7.5pt; color:#8A95A3; text-transform:uppercase; letter-spacing:1px;">Seismic Risk</span>
           <span class="badge badge-[[seismic_veto_class]]">[[seismic_veto]]</span>
         </div>
+
+        <!-- COURT: badge-ok / badge-warn / badge-alert -->
         <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(13,27,42,0.6); border:1px solid rgba(183,121,31,0.15);">
           <span style="font-size:7.5pt; color:#8A95A3; text-transform:uppercase; letter-spacing:1px;">Supreme Court</span>
           <span class="badge badge-[[court_veto_class]]">[[court_veto]]</span>
         </div>
+
+        <!-- OWNERSHIP: badge-ok / badge-warn / badge-alert -->
         <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(13,27,42,0.6); border:1px solid rgba(183,121,31,0.15);">
           <span style="font-size:7.5pt; color:#8A95A3; text-transform:uppercase; letter-spacing:1px;">Ownership Claims</span>
           <span class="badge badge-[[ownership_veto_class]]">[[ownership_veto]]</span>
         </div>
+
       </div>
       <p class="body-text" style="margin-top:20px;">[[tri_veto_logic]]</p>
     </div>
@@ -205,7 +208,7 @@
       <div style="background:rgba(13,27,42,0.8); border:1px solid rgba(183,121,31,0.25); border-left:3px solid #B7791F; padding:24px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
           <div style="font-family:'Cormorant Garamond',serif; font-size:15pt; color:#B7791F; font-style:italic;">Verdict</div>
-          <!-- [[deal_decision_badge]] = badge-ok / badge-alert → controls BADGE COLOUR only -->
+          <!-- [[deal_decision_badge]] = badge-ok / badge-warn / badge-alert -->
           <div class="badge [[deal_decision_badge]]">[[deal_decision_text]]</div>
         </div>
         <div class="body-text">[[recommendation]]</div>
