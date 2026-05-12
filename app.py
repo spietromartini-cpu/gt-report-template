@@ -27,7 +27,6 @@ class InvestmentReportGenerator:
     def __init__(self, template_path: str):
         self.template_path = template_path
         self.template_content = self._load_template()
-        # WICHTIG: Damit das PDF-Design (CSS & Bilder) gefunden wird!
         self.base_url = str(Path(template_path).parent.resolve())
 
     def _load_template(self) -> str:
@@ -40,17 +39,14 @@ class InvestmentReportGenerator:
     def generate_pdf_bytes(self, data: dict) -> io.BytesIO:
         html_content = self.template_content
         for key, value in data.items():
-            # FIX 1: Umstellung auf eckige Klammern [[key]]
             placeholder = "[[" + key + "]]"
             html_content = html_content.replace(placeholder, str(value))
 
-        # FIX 2: Verbesserte Suche für Rest-Platzhalter (erkennt auch Leerzeichen)
         remaining = re.findall(r'\[\[(.*?)\]\]', html_content)
         if remaining:
             print(f"Warning — unreplaced placeholders: {remaining}")
 
         pdf_buffer = io.BytesIO()
-        # FIX 3: base_url hinzugefügt, damit das Design (CSS) geladen wird!
         HTML(string=html_content, base_url=self.base_url).write_pdf(pdf_buffer)
         pdf_buffer.seek(0)
         return pdf_buffer
@@ -58,30 +54,32 @@ class InvestmentReportGenerator:
     @staticmethod
     def compute_derived_fields(data: dict) -> dict:
 
-        # Investor profile badge
+        # ── Investor profile badge ──────────────────────────────────────────
         profile = data.get("investorProfile", "retail")
         data["investor_profile_class"] = "profile-retail" if profile == "retail" else "profile-inst"
         data["investor_profile_label"] = "Private Investor" if profile == "retail" else "Institutional Investor"
 
-        # Strategy label
-        strategy_map = {
-            "rent":  ("Buy & Rent", "Cash flow via rental income"),
-            "hold":  ("Buy & Hold", "Long-term capital appreciation"),
-            "sell":  ("Buy & Sell", "Value-add resale strategy"),
-            "flip":  ("Fix & Flip", "Short-term renovation arbitrage"),
-        }
-        strat = data.get("strategy", "rent")
-        data["strategy_label"] = strategy_map.get(strat, ("—", "—"))[0]
-        data["strategy_sub"]   = strategy_map.get(strat, ("—", "—"))[1]
+        # ── Strategy label
+        # FIX: Only compute if Gemini did NOT already send strategy_label
+        if not data.get("strategy_label"):
+            strategy_map = {
+                "rent":  ("Buy & Rent",  "Cash flow via rental income"),
+                "hold":  ("Buy & Hold",  "Long-term capital appreciation"),
+                "sell":  ("Buy & Sell",  "Value-add resale strategy"),
+                "flip":  ("Fix & Flip",  "Short-term renovation arbitrage"),
+            }
+            strat = data.get("strategy", "rent")
+            data["strategy_label"] = strategy_map.get(strat, ("—", "—"))[0]
+            data["strategy_sub"]   = strategy_map.get(strat, ("—", "—"))[1]
 
-        # TRI score bar percentage
+        # ── TRI score bar percentage ────────────────────────────────────────
         try:
             tri_raw = float(str(data.get("tri_score", "5")).replace(",", "."))
             data["tri_score_pct"] = round(tri_raw * 10)
         except:
             data["tri_score_pct"] = 50
 
-        # GRI bar percentages
+        # ── GRI bar percentages ─────────────────────────────────────────────
         for gri_key in ["gri_conflict", "gri_fiscal", "gri_exit", "gri_composite"]:
             try:
                 val = float(str(data.get(gri_key, "3.8")).replace(",", "."))
@@ -89,7 +87,7 @@ class InvestmentReportGenerator:
             except:
                 data[gri_key + "_pct"] = 38
 
-        # Veto warning block HTML
+        # ── Veto warning block HTML ─────────────────────────────────────────
         seismic_class   = str(data.get("seismic_veto_class", "ok"))
         court_class     = str(data.get("court_veto_class", "ok"))
         ownership_class = str(data.get("ownership_veto_class", "ok"))
@@ -111,7 +109,7 @@ class InvestmentReportGenerator:
         else:
             data["veto_warning_block"] = ""
 
-        # Format currency fields for display
+        # ── Format currency fields ──────────────────────────────────────────
         def fmt_eur(val, key_out):
             try:
                 v = float(str(data.get(val, 0)).replace(",", ".").replace("€","").replace(" ",""))
@@ -119,13 +117,16 @@ class InvestmentReportGenerator:
             except:
                 data[key_out] = data.get(val, "—")
 
-        fmt_eur("price",          "price")
-        fmt_eur("equity",         "equity")
         fmt_eur("ancillaryCosts", "ancillary_costs")
         fmt_eur("monthlyRent",    "monthly_rent")
         fmt_eur("managementCost", "management_cost")
+        # FIX: Only format price/equity from raw fields if Gemini did NOT send them already
+        if not data.get("price"):
+            fmt_eur("price", "price")
+        if not data.get("equity"):
+            fmt_eur("equity", "equity")
 
-        # Percent fields
+        # ── Percent fields ──────────────────────────────────────────────────
         def fmt_pct(src, dst, suffix="%"):
             try:
                 v = float(str(data.get(src, 0)).replace("%","").replace(",","."))
@@ -136,67 +137,105 @@ class InvestmentReportGenerator:
         fmt_pct("interestRate", "interest_rate", "% p.a.")
         fmt_pct("vacancyRate",  "vacancy_rate_asset", "%")
 
-        # Pass-through fields with fallbacks
+        # ── Pass-through fields ─────────────────────────────────────────────
         passthrough = {
-            "city":        "city",
-            "country":     "country",
-            "district":    "district",
-            "address":     "address",
-            "assetType":   "asset_type",
-            "seismic":     "seismic_class",
-            "legal":       "legal_status",
-            "taxResidency":"tax_residency",
-            "griConflict": "gri_conflict",
-            "griFiscal":   "gri_fiscal",
-            "griExit":     "gri_exit",
-            "griComposite":"gri_composite",
-            "grAdjPct":    "gr_adj_pct",
-            "name":        "client_name",
+            "city":            "city",
+            "country":         "country",
+            "district":        "district",
+            "address":         "address",
+            "assetType":       "asset_type",
+            "seismic":         "seismic_class",
+            "legal":           "legal_status",
+            "taxResidency":    "tax_residency",
+            "griConflict":     "gri_conflict",
+            "griFiscal":       "gri_fiscal",
+            "griExit":         "gri_exit",
+            "griComposite":    "gri_composite",
+            "grAdjPct":        "gr_adj_pct",
+            "name":            "client_name",
+            # FIX: New SR-IIT fields — pass through from Gemini output
+            "deal_decision_badge": "deal_decision_badge",
+            "deal_decision_box":   "deal_decision_box",
+            "deal_decision_text":  "deal_decision_text",
+            "v_base_str":          "v_base_str",
+            "v_intrinsic_str":     "v_intrinsic_str",
+            "mao_str":             "mao_str",
+            "pi_risk_pct":         "pi_risk_pct",
+            "evr_priority_status": "evr_priority_status",
+            "brown_discount_impact": "brown_discount_impact",
+            "tax_regime_warning":  "tax_regime_warning",
+            "tri_veto_logic":      "tri_veto_logic",
+            "seismic_veto":        "seismic_veto",
+            "seismic_veto_class":  "seismic_veto_class",
+            "court_veto":          "court_veto",
+            "court_veto_class":    "court_veto_class",
+            "ownership_veto":      "ownership_veto",
+            "ownership_veto_class":"ownership_veto_class",
+            "macro_analysis":      "macro_analysis",
+            "ownership_layers":    "ownership_layers",
+            "rent_gap_analysis":   "rent_gap_analysis",
+            "recommendation":      "recommendation",
+            "narrative_text":      "narrative_text",
+            "gdp_growth":          "gdp_growth",
+            "unemployment":        "unemployment",
+            "vacancy_rate":        "vacancy_rate",
+            "price_appreciation":  "price_appreciation",
+            "return_label":        "return_label",
+            "return_value":        "return_value",
+            "coc_return":          "coc_return",
+            "loan_years_str":      "loan_years_str",
+            "monthly_rent_estimate": "monthly_rent_estimate",
         }
         for src, dst in passthrough.items():
             if dst not in data:
                 data[dst] = data.get(src, "—")
 
-        # --- NEUE FELDER (fehlten bisher) ---
+        # ── Date ────────────────────────────────────────────────────────────
+        # FIX: Only set date if Gemini did NOT already send one
+        if not data.get("date"):
+            data["date"] = datetime.now().strftime("%d. %B %Y")
 
-        # Date
-        data["date"] = datetime.now().strftime("%d.%m.%Y")
+        # ── Property name ───────────────────────────────────────────────────
+        # FIX: Only compute if Gemini did NOT already send property_name
+        if not data.get("property_name"):
+            city  = data.get("city", "—")
+            asset = data.get("asset_type", data.get("assetType", "—"))
+            data["property_name"] = f"{city} — {asset}"
 
-        # Property name
-        city = data.get("city", "—")
-        asset = data.get("asset_type", data.get("assetType", "—"))
-        data["property_name"] = f"{city} — {asset}"
-
-        # Usable area
+        # ── Usable area ─────────────────────────────────────────────────────
         data["usable_area"] = f"{data.get('area', '—')} m²"
 
-        # Financial metrics
-        try:
-            raw_price = str(data.get("price", "0")).replace("€","").replace(".","").replace(" ","").replace(",",".")
-            price_raw = float(raw_price)
-            rent_raw  = float(str(data.get("monthlyRent", "0")).replace(",","."))
-            mgmt_raw  = float(str(data.get("managementCost", "0")).replace(",","."))
+        # ── Financial metrics ───────────────────────────────────────────────
+        # FIX: Only compute if Gemini did NOT already calculate net_yield
+        if not data.get("net_yield") or data.get("net_yield") == "—":
+            try:
+                raw_price = str(data.get("price", "0")).replace("€","").replace(".","").replace(" ","").replace(",",".")
+                price_raw = float(raw_price)
+                rent_raw  = float(str(data.get("monthlyRent", "0")).replace(",","."))
+                mgmt_raw  = float(str(data.get("managementCost", "0")).replace(",","."))
 
-            net_y = round((rent_raw * 12) / price_raw * 100, 2) if price_raw > 0 else 0
-            cap_r = round(((rent_raw - mgmt_raw) * 12) / price_raw * 100, 2) if price_raw > 0 else 0
+                net_y = round((rent_raw * 12) / price_raw * 100, 2) if price_raw > 0 else 0
+                cap_r = round(((rent_raw - mgmt_raw) * 12) / price_raw * 100, 2) if price_raw > 0 else 0
 
-            data["net_yield"]  = f"{net_y:.2f}%"
-            data["cap_rate"]   = f"{cap_r:.2f}%"
-            data["yield"]      = f"{net_y:.2f}%"
-        except:
-            data["net_yield"]  = "—"
-            data["cap_rate"]   = "—"
-            data["yield"]      = "—"
+                data["net_yield"] = f"{net_y:.2f}%"
+                data["cap_rate"]  = f"{cap_r:.2f}%"
+                data["yield"]     = f"{net_y:.2f}%"
+            except:
+                data["net_yield"] = "—"
+                data["cap_rate"]  = "—"
+                data["yield"]     = "—"
 
-        # Fallbacks for optional fields
+        # ── Fallbacks ───────────────────────────────────────────────────────
         data.setdefault("coc_return",     "—")
         data.setdefault("irr_projection", "—")
+        data.setdefault("net_yield",      "—")
+        data.setdefault("cap_rate",       "—")
 
         return data
 
 
-# --- SERVER SETUP ---
-base_dir    = Path(__file__).parent
+# ── Server setup ─────────────────────────────────────────────────────────────
+base_dir      = Path(__file__).parent
 template_path = str(base_dir / "investment_report_en.html")
 
 try:
@@ -205,7 +244,8 @@ except Exception as e:
     print(f"Critical Error: Could not load template. {e}")
     generator = None
 
-# --- API ENDPOINTS ---
+
+# ── API Endpoints ─────────────────────────────────────────────────────────────
 
 @app.route('/', methods=['GET'])
 def health_check():
