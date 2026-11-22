@@ -6,10 +6,10 @@
 <style>
   @page { size: A4; margin: 0mm; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Montserrat', sans-serif; background-color: #0D1B2A; color: #F5F5F0; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: 'Montserrat', sans-serif; background-color: #290E14; color: #F5F5F0; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-  .page      { width: 210mm; height: 296mm; background-color: #0D1B2A; position: relative; page-break-after: always; padding: 48px; overflow: hidden; }
-  .page-dark { background-color: #0A1520; }
+  .page      { width: 210mm; height: 296mm; background-color: #290E14; position: relative; page-break-after: always; padding: 48px; overflow: hidden; }
+  .page-dark { background-color: #1F0B0F; }
 
   .divider  { width: 100%; height: 1px; background: #B7791F; opacity: 0.35; margin: 25px 0; }
   .two-col  { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
@@ -28,7 +28,7 @@
   .badge-warn   { background: rgba(251,191,36,0.1);  color: #FBB324; border: 1px solid rgba(251,191,36,0.3); }
   .badge-alert  { background: rgba(248,113,113,0.1); color: #F87171; border: 1px solid rgba(248,113,113,0.3); }
 
-  .footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 48px; border-top: 1px solid rgba(183,121,31,0.15); display: flex; justify-content: space-between; font-size: 6.5pt; color: #8A95A3; text-transform: uppercase; letter-spacing: 0.2em; background: rgba(9,14,22,0.6); }
+  .footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 48px; border-top: 1px solid rgba(183,121,31,0.15); display: flex; justify-content: space-between; font-size: 6.5pt; color: #A2948B; text-transform: uppercase; letter-spacing: 0.2em; background: rgba(22,9,12,0.6); }
 </style>
 </head>
 <body>
@@ -39,7 +39,7 @@
     <div style="font-size:6.5pt; font-weight:700; color:#B7791F; letter-spacing:0.3em;">STRATEGIC REAL ESTATE INTELLIGENCE</div>
     <div style="text-align:right;">
       <span style="font-family:'Cormorant Garamond',serif; font-size:26pt; font-weight:300; color:#B7791F;">G&amp;T</span><br>
-      <span style="font-size:5.5pt; color:#8A95A3; letter-spacing:0.25em;">GLOBAL ESTATES &amp; CAPITAL</span>
+      <span style="font-size:5.5pt; color:#A2948B; letter-spacing:0.25em;">GLOBAL ESTATES &amp; CAPITAL</span>
     </div>
   </div>
   <div style="margin-top:170px;">
@@ -47,7 +47,7 @@
     <div style="width:70px; height:1px; background:#B7791F; margin:35px 0;"></div>
     <h2 style="font-family:'Cormorant Garamond',serif; font-size:32pt; font-weight:300; margin-bottom:25px;">[[property_name]]</h2>
     <div style="font-size:8.5pt; font-weight:300; color:rgba(245,245,240,0.6); margin-bottom:45px; letter-spacing:0.05em;">Investment Analysis &amp; Valuation Report</div>
-    <div style="font-size:6.5pt; letter-spacing:0.25em; text-transform:uppercase; color:#8A95A3; margin-bottom:10px;">Prepared Exclusively For</div>
+    <div style="font-size:6.5pt; letter-spacing:0.25em; text-transform:uppercase; color:#A2948B; margin-bottom:10px;">Prepared Exclusively For</div>
     <div style="font-family:'Cormorant Garamond',serif; font-size:22pt; color:#B7791F;">[[client_name]]</div>
   </div>
   <div class="footer"><span>GT Global Estates &amp; Capital</span><span>[[date]]</span></div>
@@ -62,33 +62,33 @@
     </div>
     <!-- Border colour set via [[decision_border_color]] — computed in app.py -->
     <!-- This avoids WeasyPrint CSS specificity issues with !important on classes -->
-    <div style="text-align:center; border:2px solid [[decision_border_color]]; border-radius:2px; padding:18px; min-width:190px; background:rgba(13,27,42,0.8);">
-      <div style="font-size:6.5pt; font-weight:700; color:#8A95A3; letter-spacing:0.2em; margin-bottom:8px;">RECOMMENDATION</div>
+    <div style="text-align:center; border:2px solid [[decision_border_color]]; border-radius:2px; padding:18px; min-width:190px; background:rgba(41,14,20,0.8);">
+      <div style="font-size:6.5pt; font-weight:700; color:#A2948B; letter-spacing:0.2em; margin-bottom:8px;">RECOMMENDATION</div>
       <div style="font-family:'Cormorant Garamond',serif; font-size:40pt; line-height:1; margin-bottom:6px;">[[deal_decision_text]]</div>
-      <div style="font-size:5.5pt; font-weight:600; text-transform:uppercase; opacity:0.8; letter-spacing:0.1em;">Verified by SR-IIT</div>
+      <div style="font-size:5.5pt; font-weight:600; text-transform:uppercase; opacity:0.8; letter-spacing:0.1em;">Verified by the GRID Engine</div>
     </div>
   </div>
   <div class="divider"></div>
   <div class="two-col">
-    <div style="background:rgba(13,27,42,0.6); border:1px solid rgba(183,121,31,0.2); padding:26px;">
+    <div style="background:rgba(41,14,20,0.6); border:1px solid rgba(183,121,31,0.2); padding:26px;">
       <div class="col-label">Acquisition Price</div>
       <div style="font-family:'Cormorant Garamond',serif; font-size:34pt;">[[price]]</div>
     </div>
-    <div style="background:rgba(13,27,42,0.6); border:1px solid rgba(183,121,31,0.2); padding:26px;">
+    <div style="background:rgba(41,14,20,0.6); border:1px solid rgba(183,121,31,0.2); padding:26px;">
       <div class="col-label" style="text-transform:uppercase;">[[return_label]]</div>
       <div style="font-family:'Cormorant Garamond',serif; font-size:34pt; color:#B7791F;">[[return_value]]</div>
     </div>
   </div>
   <div style="margin-top:28px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
-    <div style="background:rgba(13,27,42,0.4); border:1px solid rgba(183,121,31,0.15); padding:18px;">
+    <div style="background:rgba(41,14,20,0.4); border:1px solid rgba(183,121,31,0.15); padding:18px;">
       <div class="col-label">Location</div>
       <div style="font-family:'Cormorant Garamond',serif; font-size:14pt;">[[city]], [[country]]</div>
     </div>
-    <div style="background:rgba(13,27,42,0.4); border:1px solid rgba(183,121,31,0.15); padding:18px;">
+    <div style="background:rgba(41,14,20,0.4); border:1px solid rgba(183,121,31,0.15); padding:18px;">
       <div class="col-label">Asset Type</div>
       <div style="font-family:'Cormorant Garamond',serif; font-size:14pt;">[[asset_type]]</div>
     </div>
-    <div style="background:rgba(13,27,42,0.4); border:1px solid rgba(183,121,31,0.15); padding:18px;">
+    <div style="background:rgba(41,14,20,0.4); border:1px solid rgba(183,121,31,0.15); padding:18px;">
       <div class="col-label">Strategy</div>
       <div style="font-family:'Cormorant Garamond',serif; font-size:14pt; color:#B7791F;">[[strategy_label]]</div>
     </div>
@@ -133,7 +133,7 @@
 <!-- ═══════════════════ PAGE 4 — TRI RISK & VALUATION ═══════════════════ -->
 <div class="page">
   <div class="col-label">Advanced Risk Assessment &amp; Value Determination</div>
-  <h2 style="font-family:'Cormorant Garamond',serif; font-size:26pt; font-weight:300;">Title Risk Index <span style="color:#B7791F; font-style:italic;">&amp; SR-IIT Valuation</span></h2>
+  <h2 style="font-family:'Cormorant Garamond',serif; font-size:26pt; font-weight:300;">Title Risk Index <span style="color:#B7791F; font-style:italic;">&amp; GRID Value Model</span></h2>
   <div class="divider"></div>
   <div class="two-col">
     <div>
@@ -141,20 +141,20 @@
       <div style="display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px;">
 
         <!-- SEISMIC: badge-ok / badge-warn / badge-alert -->
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(13,27,42,0.6); border:1px solid rgba(183,121,31,0.15);">
-          <span style="font-size:7.5pt; color:#8A95A3; text-transform:uppercase; letter-spacing:1px;">Seismic Risk</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(41,14,20,0.6); border:1px solid rgba(183,121,31,0.15);">
+          <span style="font-size:7.5pt; color:#A2948B; text-transform:uppercase; letter-spacing:1px;">Seismic Risk</span>
           <span class="badge badge-[[seismic_veto_class]]">[[seismic_veto]]</span>
         </div>
 
         <!-- COURT: badge-ok / badge-warn / badge-alert -->
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(13,27,42,0.6); border:1px solid rgba(183,121,31,0.15);">
-          <span style="font-size:7.5pt; color:#8A95A3; text-transform:uppercase; letter-spacing:1px;">Supreme Court</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(41,14,20,0.6); border:1px solid rgba(183,121,31,0.15);">
+          <span style="font-size:7.5pt; color:#A2948B; text-transform:uppercase; letter-spacing:1px;">Supreme Court</span>
           <span class="badge badge-[[court_veto_class]]">[[court_veto]]</span>
         </div>
 
         <!-- OWNERSHIP: badge-ok / badge-warn / badge-alert -->
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(13,27,42,0.6); border:1px solid rgba(183,121,31,0.15);">
-          <span style="font-size:7.5pt; color:#8A95A3; text-transform:uppercase; letter-spacing:1px;">Ownership Claims</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(41,14,20,0.6); border:1px solid rgba(183,121,31,0.15);">
+          <span style="font-size:7.5pt; color:#A2948B; text-transform:uppercase; letter-spacing:1px;">Ownership Claims</span>
           <span class="badge badge-[[ownership_veto_class]]">[[ownership_veto]]</span>
         </div>
 
@@ -162,7 +162,7 @@
       <p class="body-text" style="margin-top:20px;">[[tri_veto_logic]]</p>
     </div>
     <div>
-      <div class="col-label">SR-IIT Value Determination &amp; MAO</div>
+      <div class="col-label">GRID Value Model &middot; Value Determination &amp; MAO</div>
       <table class="data-table">
         <tr><td>Base Value (V_phys / ARV)</td><td>[[v_base_str]]</td></tr>
         <tr><td>Intrinsic Value (V*)</td><td>[[v_intrinsic_str]]</td></tr>
@@ -174,7 +174,7 @@
       </table>
       <div style="margin-top:28px;">
         <div class="col-label">Regulatory Impact</div>
-        <div style="padding:16px; background:rgba(13,27,42,0.5); border:1px solid rgba(183,121,31,0.2); line-height:1.6;">
+        <div style="padding:16px; background:rgba(41,14,20,0.5); border:1px solid rgba(183,121,31,0.2); line-height:1.6;">
           <div style="font-size:6.5pt; color:#F87171; font-weight:700; letter-spacing:1px; margin-bottom:8px;">EVR PRIORITY: <span style="color:#F5F5F0; font-weight:400; letter-spacing:normal;">[[evr_priority_status]]</span></div>
           <div style="font-size:6.5pt; color:#F0C060; font-weight:700; letter-spacing:1px; margin-bottom:8px;">BROWN DISCOUNT: <span style="color:#F5F5F0; font-weight:400; letter-spacing:normal;">[[brown_discount_impact]]</span></div>
           <div style="font-size:6.5pt; color:#B7791F; font-weight:700; letter-spacing:1px;">TAX REGIME: <span style="color:#F5F5F0; font-weight:400; letter-spacing:normal;">[[tax_regime_warning]]</span></div>
@@ -205,7 +205,7 @@
     </div>
     <div>
       <div class="col-label">Investment Decision</div>
-      <div style="background:rgba(13,27,42,0.8); border:1px solid rgba(183,121,31,0.25); border-left:3px solid #B7791F; padding:24px;">
+      <div style="background:rgba(41,14,20,0.8); border:1px solid rgba(183,121,31,0.25); border-left:3px solid #B7791F; padding:24px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
           <div style="font-family:'Cormorant Garamond',serif; font-size:15pt; color:#B7791F; font-style:italic;">Verdict</div>
           <!-- [[deal_decision_badge]] = badge-ok / badge-warn / badge-alert -->
@@ -228,7 +228,7 @@
   </p>
   <div style="margin-top:60px; text-align:right;">
     <div style="font-family:'Cormorant Garamond',serif; font-size:18pt; color:#B7791F; font-style:italic;">Pietro Martini</div>
-    <div style="font-size:6.5pt; color:#8A95A3; text-transform:uppercase; letter-spacing:1px; margin-top:5px;">Founder &amp; CEO · GT Global Estates</div>
+    <div style="font-size:6.5pt; color:#A2948B; text-transform:uppercase; letter-spacing:1px; margin-top:5px;">Founder &amp; CEO · GT Global Estates</div>
   </div>
   <div class="footer"><span>[[property_name]]</span><span>Page 6</span></div>
 </div>
@@ -248,7 +248,7 @@
   </div>
   <div style="margin-bottom:28px;">
     <div style="font-family:'Cormorant Garamond',serif; font-size:14pt; color:#B7791F; margin-bottom:8px;">Methodological Foundation</div>
-    <p class="body-text">This assessment is grounded in the SR-IIT Value Formula (V* = V_phys + V_econ + V_soz + IA - TRI_adj) and the TRI-Veto System, as developed by Pietro Martini (2026). Geopolitical risk (GRI) is factored exclusively into the discount rate to prevent double-counting. Case studies are based on participatory observation; sample size (n=23) falls below requirements for parametric significance testing. This report does not constitute legal or financial advice.</p>
+    <p class="body-text">This assessment is grounded in the GRID Value Model (GRID = Geospatial Risk &amp; Investment Decisioning; V* = V_phys + V_econ + V_soz + IA - TRI_adj), computed by the GRID Engine with the TRI / VETO / MAO decision logic, as developed by Pietro Martini (2026). Geopolitical risk (GRI) is factored exclusively into the discount rate to prevent double-counting. Case studies are based on participatory observation; sample size (n=23) falls below requirements for parametric significance testing. This report does not constitute legal or financial advice.</p>
   </div>
   <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 7</span></div>
 </div>

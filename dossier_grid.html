@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* GRID-Dossier · Design aus investment_report_en.html (GT Global Estates & Capital), Farbwelt Bordeaux */
+  @page { size: A4; margin: 0mm; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Montserrat', sans-serif; background-color: #290E14; color: #F5F5F0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page      { width: 210mm; height: 296mm; background-color: #290E14; position: relative; page-break-after: always; padding: 48px 48px 70px 48px; overflow: hidden; }
+  .page-dark { background-color: #1F0B0F; }
+  .divider  { width: 100%; height: 1px; background: #B7791F; opacity: 0.35; margin: 22px 0; }
+  .two-col  { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  .col-label { font-size: 6.5pt; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #B7791F; margin-bottom: 11px; }
+  .eyebrow   { font-size: 6.5pt; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #B7791F; margin-bottom: 10px; }
+  .h-page    { font-family: 'Cormorant Garamond', serif; font-size: 26pt; font-weight: 300; line-height: 1.1; }
+  .h-page em { color: #B7791F; font-style: italic; }
+  .body-text   { font-size: 8pt; font-weight: 300; color: rgba(245,245,240,0.85); line-height: 1.8; }
+  .body-text p + p { margin-top: 9px; }
+  .serif-text  { font-family: 'Cormorant Garamond', serif; font-size: 11pt; font-style: italic; color: rgba(245,245,240,0.9); line-height: 1.55; }
+  .serif-text p + p { margin-top: 14px; }
+  .muted { color: #A2948B; }
+  .gold  { color: #B7791F; }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table td { padding: 7px 0; border-bottom: 1px solid rgba(183,121,31,0.12); font-size: 7.6pt; vertical-align: top; }
+  .data-table td:first-child { color: #B7791F; font-weight: 600; text-transform: uppercase; font-size: 6.3pt; letter-spacing: 0.08em; padding-right: 8px; }
+  .data-table td:last-child  { text-align: right; color: #F5F5F0; }
+  .grid-table { width: 100%; border-collapse: collapse; font-size: 7pt; }
+  .grid-table th { text-align: right; font-size: 5.8pt; letter-spacing: 0.14em; text-transform: uppercase; color: #B7791F; font-weight: 700; padding: 6px 4px; border-bottom: 1px solid rgba(183,121,31,0.35); }
+  .grid-table th:first-child, .grid-table td:first-child { text-align: left; }
+  .grid-table td { text-align: right; padding: 5px 4px; border-bottom: 1px solid rgba(183,121,31,0.10); color: rgba(245,245,240,0.9); }
+  .grid-table tr.total td { border-top: 1px solid rgba(183,121,31,0.45); color: #B7791F; font-weight: 600; }
+  .card      { background: rgba(41,14,20,0.6); border: 1px solid rgba(183,121,31,0.2); padding: 20px; }
+  .card-sm   { background: rgba(41,14,20,0.4); border: 1px solid rgba(183,121,31,0.15); padding: 15px; }
+  .num-xl    { font-family: 'Cormorant Garamond', serif; font-size: 27pt; line-height: 1.05; }
+  .num-md    { font-family: 'Cormorant Garamond', serif; font-size: 15pt; line-height: 1.1; }
+  .badge        { display: inline-block; padding: 4px 10px; font-weight: 700; border-radius: 2px; text-transform: uppercase; font-size: 6pt; letter-spacing: 0.14em; }
+  .badge-ok     { background: rgba(74,222,128,0.1);  color: #4ADE80; border: 1px solid rgba(74,222,128,0.3); }
+  .badge-warn   { background: rgba(251,191,36,0.1);  color: #FBB324; border: 1px solid rgba(251,191,36,0.3); }
+  .badge-alert  { background: rgba(248,113,113,0.1); color: #F87171; border: 1px solid rgba(248,113,113,0.3); }
+  .badge-muted  { background: rgba(162,148,139,0.08); color: #A2948B; border: 1px solid rgba(162,148,139,0.3); }
+  .bar     { height: 4px; background: rgba(183,121,31,0.15); margin-top: 4px; }
+  .bar > i { display: block; height: 4px; background: #B7791F; }
+  .note    { font-size: 6.4pt; color: #A2948B; line-height: 1.6; }
+  .footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 48px; border-top: 1px solid rgba(183,121,31,0.15); display: flex; justify-content: space-between; font-size: 6.5pt; color: #A2948B; text-transform: uppercase; letter-spacing: 0.2em; background: rgba(22,9,12,0.6); }
+</style>
+</head>
+<body>
+
+{# ═════════ PAGE 1 — COVER ═════════ #}
+<div class="page">
+  <div style="display:flex; justify-content:space-between;">
+    <div style="font-size:6.5pt; font-weight:700; color:#B7791F; letter-spacing:0.3em;">GRID &middot; GEOSPATIAL RISK &amp; INVESTMENT DECISIONING</div>
+    <div style="text-align:right;">
+      <span style="font-family:'Cormorant Garamond',serif; font-size:26pt; font-weight:300; color:#B7791F;">G&amp;T</span><br>
+      <span style="font-size:5.5pt; color:#A2948B; letter-spacing:0.25em;">GLOBAL ESTATES &amp; CAPITAL</span>
+    </div>
+  </div>
+  <div style="margin-top:160px;">
+    <h1 style="font-family:'Cormorant Garamond',serif; font-size:48pt; font-weight:300; line-height:0.95;">GT GLOBAL<br><span style="color:#B7791F; font-style:italic;">ESTATES</span></h1>
+    <div style="width:70px; height:1px; background:#B7791F; margin:35px 0;"></div>
+    <h2 style="font-family:'Cormorant Garamond',serif; font-size:30pt; font-weight:300; margin-bottom:22px;">{{ title }}</h2>
+    <div style="font-size:8.5pt; font-weight:300; color:rgba(245,245,240,0.6); margin-bottom:45px; letter-spacing:0.05em;">GRID Dossier &middot; {{ asset_label }} &middot; GRID Value Model</div>
+    <div style="font-size:6.5pt; letter-spacing:0.25em; text-transform:uppercase; color:#A2948B; margin-bottom:10px;">Prepared Exclusively For</div>
+    <div style="font-family:'Cormorant Garamond',serif; font-size:22pt; color:#B7791F;">{{ client_name }}</div>
+  </div>
+  <div class="footer"><span>GT Global Estates &amp; Capital &middot; GRID Engine</span><span>{{ date }} &middot; Ref. {{ ref }}</span></div>
+</div>
+
+{# ═════════ PAGE 2 — EXECUTIVE SUMMARY ═════════ #}
+<div class="page">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+    <div>
+      <div class="eyebrow">Executive Summary</div>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-size:34pt; font-weight:300; line-height:1.05;">Strategic Market<br><span style="color:#B7791F; font-style:italic;">Intelligence</span></h2>
+    </div>
+    <div style="text-align:center; border:2px solid {{ verdict.color }}; border-radius:2px; padding:16px 18px; min-width:190px; max-width:230px; background:rgba(41,14,20,0.8);">
+      <div style="font-size:6.5pt; font-weight:700; color:#A2948B; letter-spacing:0.2em; margin-bottom:8px;">RECOMMENDATION</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-size:{{ verdict.size }}; line-height:1; margin-bottom:6px; color:{{ verdict.color }};">{{ verdict.label }}</div>
+      <div style="font-size:5.5pt; font-weight:600; text-transform:uppercase; opacity:0.8; letter-spacing:0.1em;">Verified by the GRID Engine</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;">
+    <div class="card"><div class="col-label">Asking Price</div><div class="num-xl">{{ k.asking }}</div><div class="note" style="margin-top:6px;">{{ k.asking_m2 }} / m²</div></div>
+    <div class="card"><div class="col-label">Market Value Indication</div><div class="num-xl">{{ k.market_value }}</div><div class="note" style="margin-top:6px;">Income approach{{ ', reconciled with comparables' if k.has_comp else '' }}</div></div>
+    <div class="card"><div class="col-label">Maximum Allowable Offer</div><div class="num-xl gold">{{ k.mao }}</div><div class="note" style="margin-top:6px;">{{ k.mao_m2 }} / m² &middot; {{ profile_label }}</div></div>
+  </div>
+  <div style="margin-top:14px; display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px;">
+    <div class="card-sm"><div class="col-label">Net Initial Yield</div><div class="num-md">{{ k.niy }}</div></div>
+    <div class="card-sm"><div class="col-label">IRR (risk-adj.)</div><div class="num-md">{{ k.irr }}</div><div class="note">target {{ k.target_irr }}</div></div>
+    <div class="card-sm"><div class="col-label">Location Score</div><div class="num-md">{{ score.value }}<span class="muted" style="font-size:9pt;"> / 100</span></div></div>
+    <div class="card-sm"><div class="col-label">Title Risk Index</div><div class="num-md">{{ tri.value }}<span class="muted" style="font-size:9pt;"> / 10</span></div></div>
+  </div>
+  <div style="margin-top:14px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;">
+    <div class="card-sm"><div class="col-label">Location</div><div class="num-md" style="font-size:12pt;">{{ location }}</div></div>
+    <div class="card-sm"><div class="col-label">Asset Class</div><div class="num-md" style="font-size:12pt;">{{ asset_label }}</div><div class="note">{{ nla }} m² NLA &middot; occupancy {{ occupancy }}</div></div>
+    <div class="card-sm"><div class="col-label">Investor Profile</div><div class="num-md gold" style="font-size:12pt;">{{ profile_label }}</div></div>
+  </div>
+  <div class="divider"></div>
+  <div class="col-label">Investment Recommendation</div>
+  <div class="body-text" style="border-left:2px solid {{ verdict.color }}; padding-left:16px;">{% for p in t.recommendation %}<p>{{ p }}</p>{% endfor %}</div>
+  <div class="footer"><span>Report for {{ client_name }}</span><span>Page 2</span></div>
+</div>
+
+{# ═════════ PAGE 3 — MARKET & SPATIAL THEORY ═════════ #}
+<div class="page page-dark">
+  <div class="eyebrow">Market Analysis &amp; Spatial Value Theory</div>
+  <h2 class="h-page">Market Analysis <em>&amp; {{ theory_title }}</em></h2>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div>
+      <div class="col-label">Macroeconomic &amp; Capital-Market Setting</div>
+      <div class="body-text">{% for p in t.macro_analysis %}<p>{{ p }}</p>{% endfor %}</div>
+    </div>
+    <div>
+      <div class="col-label">Yield Architecture</div>
+      <table class="data-table">
+        <tr><td>Prime yield (market)</td><td>{{ y.prime }}</td></tr>
+        <tr><td>Asset-adjusted yield</td><td>{{ y.adjusted }}</td></tr>
+        <tr><td>Exit yield (year 10)</td><td>{{ y.exit }}</td></tr>
+        <tr><td>Market discount rate</td><td>{{ y.discount }}</td></tr>
+        <tr><td>Target IRR ({{ profile_short }})</td><td>{{ y.target }}</td></tr>
+      </table>
+      <div class="note" style="margin-top:8px;">{{ y.source }}</div>
+      {% if macro_rows or pv_row %}
+      <div class="col-label" style="margin-top:18px;">Market &amp; Site Indicators</div>
+      <table class="data-table">
+        {% for m in macro_rows %}<tr><td>{{ m.label }}</td><td>{{ m.value }}</td></tr>{% endfor %}
+        {% if pv_row %}<tr><td>Solar yield (flat roof)</td><td>{{ pv_row }}</td></tr>{% endif %}
+      </table>
+      <div class="note" style="margin-top:6px;">World Bank Open Data; EU JRC PVGIS. Retrieved {{ retrieved_at }}.</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div>
+      <div class="col-label">{{ theory_label }}</div>
+      <div class="body-text">{% for p in t.spatial_analysis %}<p>{{ p }}</p>{% endfor %}</div>
+    </div>
+    <div>
+      <div class="col-label">Location Score &middot; {{ score.value }} / 100</div>
+      {% if score.unknown %}<div class="note" style="margin-bottom:6px;">{{ score.unknown }} of 100 points could not be scored because the data was not provided.</div>{% endif %}
+      <table class="grid-table">
+        <tr><th>Criterion</th><th>Points</th><th>Max</th></tr>
+        {% for row in score.rows %}
+        <tr><td>{{ row.label }}<div class="bar"><i style="width:{{ row.pct }}%;"></i></div></td><td>{{ row.points }}</td><td class="muted">{{ row.max }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 3</span></div>
+</div>
+
+{# ═════════ PAGE 4 — OWNERSHIP PALIMPSEST ═════════ #}
+<div class="page">
+  <div class="eyebrow">History as Land Register</div>
+  <h2 class="h-page">Ownership Layers <em>&amp; Value Gap</em></h2>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div>
+      <div class="col-label">The Four-Layer Palimpsest</div>
+      <div class="body-text">{% for p in t.ownership_layers %}<p>{{ p }}</p>{% endfor %}</div>
+    </div>
+    <div>
+      <div class="col-label">Value Gap Analysis</div>
+      <div class="body-text">{% for p in t.value_gap_analysis %}<p>{{ p }}</p>{% endfor %}</div>
+      {% if context_rows %}
+      <div class="col-label" style="margin-top:20px;">Client-Provided Context</div>
+      <table class="data-table">
+        {% for row in context_rows %}<tr><td>{{ row.label }}</td><td style="text-align:left; padding-left:10px;">{{ row.value }}</td></tr>{% endfor %}
+      </table>
+      {% endif %}
+    </div>
+  </div>
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 4</span></div>
+</div>
+
+{# ═════════ PAGE 5 — VETO GATE & TRI ═════════ #}
+<div class="page page-dark">
+  <div class="eyebrow">Advanced Risk Assessment</div>
+  <h2 class="h-page">Binary Veto Gate <em>&amp; Title Risk Index</em></h2>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div>
+      <div class="col-label">Veto Check &middot; Knock-out Criteria</div>
+      <table class="data-table">
+        {% for g in gate_rows %}<tr><td>{{ g.label }}</td><td><span class="badge {{ g.cls }}">{{ g.status }}</span></td></tr>{% endfor %}
+      </table>
+      {% if auto_rows %}<div class="col-label" style="margin-top:18px;">Automated Location Checks</div>
+      <table class="data-table">{% for a in auto_rows %}<tr><td>{{ a.label }}</td><td>{{ a.value }}</td></tr>{% endfor %}</table>{% endif %}
+      {% if flags %}<div class="col-label" style="margin-top:18px;">Advisory Flags</div>
+      <div class="body-text">{% for f in flags %}<p>{{ f }}</p>{% endfor %}</div>{% endif %}
+    </div>
+    <div>
+      <div class="col-label">Title Risk Index &middot; {{ tri.value }} / 10</div>
+      <table class="grid-table">
+        <tr><th>Component</th><th>Score</th><th>Weight</th></tr>
+        {% for c in tri.rows %}<tr><td>{{ c.label }}</td><td>{{ c.score }}</td><td class="muted">{{ c.weight }}</td></tr>{% endfor %}
+      </table>
+      <div class="note" style="margin-top:8px;">Profile limit: {{ tri.limit }}. Unknown components are scored as medium risk (3.0) until documents are provided.</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="col-label">Risk Commentary</div>
+  <div class="body-text">{% for p in t.risk_commentary %}<p>{{ p }}</p>{% endfor %}</div>
+  {% if gaps %}<div class="col-label" style="margin-top:16px;">Open Due-Diligence Points</div>
+  <div class="body-text">{{ gaps | join(' · ') }}</div>{% endif %}
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 5</span></div>
+</div>
+
+{# ═════════ PAGE 6 — VALUATION ═════════ #}
+<div class="page">
+  <div class="eyebrow">Discounted Cash Flow &amp; Value Determination</div>
+  <h2 class="h-page">GRID Value Model <em>Valuation</em></h2>
+  <div class="divider"></div>
+  {% if cf %}
+  <div class="col-label">Ten-Year Cash Flow (EUR, expected values)</div>
+  <table class="grid-table">
+    <tr><th>Year</th><th>Rental income</th><th>Net operating income</th><th>Leasing costs</th><th>Net cash flow</th></tr>
+    {% for r in cf.rows %}<tr><td>{{ r.year }}</td><td>{{ r.rent }}</td><td>{{ r.noi }}</td><td>{{ r.leasing }}</td><td>{{ r.cf }}</td></tr>{% endfor %}
+    <tr class="total"><td>Exit value (end of year 10, net)</td><td></td><td></td><td></td><td>{{ cf.exit }}</td></tr>
+  </table>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div>
+      <div class="col-label">Value Determination</div>
+      <table class="data-table">
+        <tr><td>Income value</td><td>{{ val.income }}</td></tr>
+        <tr><td>Comparable value</td><td>{{ val.comp }}</td></tr>
+        <tr><td>Market value indication</td><td>{{ val.market }}</td></tr>
+        <tr><td>Legal risk provision (JP)</td><td>{{ val.jp }}</td></tr>
+        <tr><td>Maximum allowable offer</td><td class="gold">{{ val.mao }}</td></tr>
+        <tr><td>Asking price / MAO</td><td>{{ val.ratio }}</td></tr>
+        <tr><td>IRR at asking (cash / risk-adj.)</td><td>{{ val.irr_cash }} / {{ val.irr_risk }}</td></tr>
+        <tr><td>Information alpha (negotiation room)</td><td>{{ val.alpha }}</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="col-label">Scenarios</div>
+      <table class="grid-table">
+        <tr><th>Scenario</th><th>MAO</th><th>IRR risk-adj.</th><th>Exit value</th></tr>
+        {% for s in scen %}<tr><td>{{ s.name }}</td><td>{{ s.mao }}</td><td>{{ s.irr }}</td><td>{{ s.exit }}</td></tr>{% endfor %}
+      </table>
+      <div class="note" style="margin-top:10px;">Downside: market rent −10 %, renewal probability −15 pp, exit yield +{{ val.gri_shift }} from geopolitical conflict and exit-liquidity risk. Upside: market rent +5 %, exit yield −25 bp. Unlevered, before investor-level taxes.</div>
+    </div>
+  </div>
+  {% else %}
+  <div class="body-text"><p>No valuation was calculated because a binary veto criterion applies. See page 5.</p></div>
+  {% endif %}
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 6</span></div>
+</div>
+
+{# ═════════ PAGE 7 — EXECUTIVE NARRATIVE ═════════ #}
+<div class="page page-dark">
+  <div class="eyebrow">Strategic Intelligence Report</div>
+  <h2 class="h-page">Executive <em>Narrative</em></h2>
+  <div class="divider"></div>
+  <div class="serif-text">{% for p in t.narrative %}<p>{{ p }}</p>{% endfor %}</div>
+  <div style="margin-top:22px; text-align:right;">
+    <div style="font-family:'Cormorant Garamond',serif; font-size:16pt; font-style:italic; color:#B7791F;">Pietro Martini</div>
+    <div style="font-size:5.5pt; letter-spacing:0.2em; color:#A2948B;">FOUNDER &amp; CEO &middot; GT GLOBAL ESTATES</div>
+  </div>
+  <div class="footer"><span>{{ title }}</span><span>Page 7</span></div>
+</div>
+
+{# ═════════ PAGE 8 — METHODOLOGY & DISCLAIMER ═════════ #}
+<div class="page">
+  <div class="eyebrow">Legal &amp; Compliance</div>
+  <h2 class="h-page">Methodology <em>&amp; Disclosures</em></h2>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div>
+      <div class="col-label">Methodological Foundation</div>
+      <div class="body-text">
+        <p>This dossier applies the GRID Value Model (GRID = Geospatial Risk &amp; Investment Decisioning), developed by Pietro Martini (GT Global Estates &amp; Capital) on the basis of the treatise From the Rubble and computed by the GRID Engine. The decision logic is TRI, VETO and MAO. A binary veto gate is checked first; if a knock-out criterion applies, no value is calculated. Otherwise the engine projects ten years of expected cash flows, including re-letting risk, and capitalises an exit value. Market value is the reconciled income and comparable value. The maximum allowable offer is the highest price at which the profile's target return is still reached after a legal risk provision derived from the Title Risk Index.</p>
+        <p>Location quality is not added as a surcharge; it moves yields and re-letting probability. Information advantages are shown as negotiation room, not as value. Geopolitical risk enters only the downside scenario, because market yields already contain country risk.</p>
+      </div>
+      <div class="col-label" style="margin-top:16px;">Limitation of Liability</div>
+      <div class="body-text"><p>Automated preliminary assessment based on information provided by the client and on public market data at the date of preparation. It is not a valuation under ANEVAR or RICS standards, not a legal or tax opinion and not investment advice. All legal, cadastral, technical and tax points must be verified by qualified local professionals before any binding offer.</p></div>
+      <div class="col-label" style="margin-top:16px;">Confidentiality</div>
+      <div class="body-text"><p>This document is confidential and intended solely for {{ client_name }}. Redistribution without written authorisation from GT Global Estates &amp; Capital is prohibited.</p></div>
+    </div>
+    <div>
+      {% if source_rows %}
+      <div class="col-label">Data Provenance</div>
+      <table class="grid-table">
+        <tr><th>Source</th><th>Status</th></tr>
+        {% for r in source_rows %}<tr><td>{{ r.label }}</td><td class="muted">{{ r.status }}</td></tr>{% endfor %}
+      </table>
+      <div class="note" style="margin-top:6px; margin-bottom:16px;">Retrieved {{ retrieved_at }}. {{ provenance_count }} input value(s) filled automatically; client-provided values take precedence. Map data © OpenStreetMap contributors (ODbL). Zoning (PUZ/PUG), land register and seismic class are not available via public interfaces and rely on client information.</div>
+      {% endif %}
+      <div class="col-label">Model Assumptions Used ({{ assumptions | length }})</div>
+      <table class="grid-table">
+        <tr><th>Parameter</th><th>Status</th></tr>
+        {% for a in assumptions[:14] %}<tr><td>{{ a.path }}</td><td class="muted">{{ a.status }}</td></tr>{% endfor %}
+      </table>
+      {% if assumptions | length > 14 %}<div class="note" style="margin-top:6px;">+ {{ assumptions | length - 14 }} further parameters, available on request.</div>{% endif %}
+      <div class="note" style="margin-top:10px;">{{ engine_version }} &middot; parameters {{ params_version }} &middot; analysis of {{ analysis_date }}, dossier of {{ date }}. Status “market” = broker research; “manuscript” = taken from From the Rubble v3.0, not yet calibrated; “assumption” = model default.</div>
+    </div>
+  </div>
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 8</span></div>
+</div>
+
+{# ═════════ PAGE 9 — CLIENT STATEMENTS ═════════ #}
+{% if answers %}
+<div class="page page-dark">
+  <div class="eyebrow">Appendix &middot; Source: Client</div>
+  <h2 class="h-page">Client <em>Statements</em></h2>
+  <div class="divider"></div>
+  <div class="note" style="margin-bottom:12px;">Answers given by the client in the GRID intake form. They are used as context and have not been verified by GT Global Estates &amp; Capital.</div>
+  <table class="data-table">
+    {% for a in answers %}<tr><td style="width:46%;">{{ a.question }}</td><td style="text-align:left; padding-left:10px;">{{ a.answer }}</td></tr>{% endfor %}
+  </table>
+  {% if answers_more %}<div class="note" style="margin-top:8px;">+ {{ answers_more }} further answers, available on request.</div>{% endif %}
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 9</span></div>
+</div>
+{% endif %}
+
+</body>
+</html>

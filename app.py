@@ -18,10 +18,14 @@ app = Flask(__name__)
 
 API_KEY = os.environ.get("API_KEY")
 
+# GRID-Dossier (Gewerbe / Industrie & Logistik) — eigener Endpunkt /generate-dossier, Schlüssel DOSSIER_API_KEY ist Pflicht
+import dossier_grid  # noqa: E402
+dossier_grid.register(app)
+
 
 class InvestmentReportGenerator:
     """
-    GT Global Estates — SR-IIT v2.1 PDF Generator
+    GT Global Estates — GRID PDF Generator (Bericht v2.1, Wohnen; Dossier: dossier_grid.py)
     Placeholders: [[key]] syntax. Replaced from Gemini AI / Make.com data.
     """
 
@@ -187,7 +191,7 @@ class InvestmentReportGenerator:
         }
         data["decision_border_color"] = color_map.get(box, "rgba(183,121,31,0.4)")
 
-        # ── 10. Pass-through — all Gemini SR-IIT output fields ──────────────
+        # ── 10. Pass-through — all Gemini GRID output fields ──────────────
         passthrough = {
             "city":                  "city",
             "country":               "country",
@@ -331,7 +335,7 @@ except Exception as e:
 
 @app.route('/', methods=['GET'])
 def health_check():
-    return "GT PDF Server - SR-IIT v2.1 - LIVE"
+    return "GT PDF Server - GRID Engine - LIVE"
 
 
 @app.route('/generate-pdf', methods=['POST'])
