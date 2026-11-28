@@ -34,35 +34,39 @@ _env = Environment(
 
 # Maximale Zeichen je Textfeld (passend zum Seitenlayout, mit Reserve)
 TEXT_LIMITS = {
-    "macro_analysis": 1500,
-    "spatial_analysis": 1150,
+    "macro_analysis": 1650,
+    "spatial_analysis": 1250,
+    "income_analysis": 1150,   # v3.4
+    "asset_quality": 1050,     # v3.4
     "ownership_layers": 1500,
-    "value_gap_analysis": 1000,
-    "risk_commentary": 1050,
-    "recommendation": 800,
+    "value_gap_analysis": 1100,
+    "risk_commentary": 1150,
+    "recommendation": 900,
     "narrative": 1000,  # je Absatz
 }
 
 VERDICT = {
-    "GO": ("PROCEED", "#4ADE80", "38pt"),
-    "CAUTION": ("CAUTION", "#FBB324", "32pt"),
-    "NO_GO_PRICE": ("NOT AT THIS PRICE", "#F87171", "22pt"),
-    "VETO": ("VETO", "#F87171", "38pt"),
-    "INCOMPLETE": ("DATA INCOMPLETE", "#FBB324", "22pt"),
+    "GO": ("PROCEED", "#15803D", "30pt"),
+    "CAUTION": ("CAUTION", "#B45309", "30pt"),
+    "NO_GO_PRICE": ("NOT AT THIS PRICE", "#B91C1C", "22pt"),
+    "VETO": ("VETO", "#B91C1C", "38pt"),
+    "INCOMPLETE": ("DATA INCOMPLETE", "#B45309", "22pt"),
 }
 
-ASSET = {"COM": "Commercial Office", "IND": "Industrial & Logistics"}
+ASSET = {"COM": "Commercial", "IND": "Industrial & Logistics"}
+SIGNAL = {"ABOVE_MARKET": ("ABOVE MARKET", "#B91C1C"), "IN_LINE": ("IN LINE WITH MARKET", "#B45309"), "BELOW_MARKET": ("BELOW MARKET", "#15803D")}
+STRATEGY = {"core": "Core", "core_plus": "Core+", "value_add": "Value-add", "opportunistic": "Opportunistic"}
 PROFILE = {"private": "Private / Family Office", "institutional": "Institutional", "retail": "Retail"}
 THEORY = {
-    "COM": ("Agglomeration", "Agglomeration &middot; Sassen / Jacobs / ESG"),
-    "IND": ("Flow Sovereignty", "Flow Sovereignty &middot; Harvey / Castells"),
+    "COM": ("Location Economics", "Location economics &middot; Alonso / Glaeser / Sassen"),
+    "IND": ("Location and Flows", "Location and flows &middot; Weber / Castells / Rodrigue"),
 }
 SCORE_PARTS = {
     "COM": [("transit", "Public transport (1 km)", 30), ("metro", "Metro distance", 15), ("certification", "ESG certification", 15),
             ("energy", "Energy class", 15), ("covenant", "Tenant covenant", 15), ("concentration", "Tenant concentration", 10)],
     "IND": [("route", "Truck route to motorway", 25), ("clearHeight", "Clear height", 15), ("floorLoad", "Floor load", 10),
             ("docks", "Docks per 1,000 m²", 10), ("yard", "Yard depth", 10), ("power", "Power capacity", 10),
-            ("esfr", "ESFR sprinklers", 8), ("rail", "Rail siding", 7), ("expansion", "Expansion land", 5)],
+            ("esfr", "ESFR sprinklers", 8), ("rail", "Rail siding (bonus)", 7), ("expansion", "Expansion land (bonus)", 5)],
 }
 TRI_LABELS = [("H", "Ownership history density"), ("J", "Legal friction"), ("K", "Cadastre quality"),
               ("D", "Technical documentation"), ("SRI", "Seismic residual risk")]
@@ -89,6 +93,11 @@ CODE_LABELS = {
     "HGV_RESTRICTION_NEARBY": "Possible weight/height restriction on roads near the site (OpenStreetMap): verify truck route",
     "ROUTE_NOT_VERIFIED": "Truck route to motorway not verified (straight-line distance only)",
     "DATA_SOURCE_UNAVAILABLE": "An external data source did not respond; affected values were not estimated",
+    "PASSING_RENT_ABOVE_PRIME": "Passing rent above the prime market rent in broker data",
+    "ERV_CAPPED_AT_PRIME_RENT": "Market rent capped at the prime rent in broker data",
+    "YIELD_REGIONAL_UNCALIBRATED": "Yields calibrated for Bucharest offices only; result capped at Caution",
+    "YIELD_SEGMENT_UNCALIBRATED": "Yields calibrated for offices; result capped at Caution",
+    "BUILDING_TAX_NOT_PROVIDED": "Local building tax not provided; not included in costs",
     "DOCKS_UNKNOWN": "Number of docks", "YARD_UNKNOWN": "Yard depth", "POWER_UNKNOWN": "Power capacity",
     "ROUTE_UNKNOWN": "Truck route to motorway", "CLEAR_HEIGHT_UNKNOWN": "Clear height", "FLOOR_LOAD_UNKNOWN": "Floor load",
     "TRANSIT_UNKNOWN": "Public transport count", "METRO_DISTANCE_UNKNOWN": "Metro distance",
@@ -186,7 +195,7 @@ def build_context(payload: dict) -> dict:
     city = inp["location"].get("city") or ""
     country = inp["location"].get("country") or ""
 
-    label, color, size = VERDICT.get(result["verdict"], ((engine.get("verdictLabel") or result["verdict"]).upper(), "#B7791F", "30pt"))
+    label, color, size = VERDICT.get(result["verdict"], ((engine.get("verdictLabel") or result["verdict"]).upper(), "#8A6A2E", "30pt"))
     eng_labels = engine.get("labels") or {}
 
     def code_label(code):
@@ -194,8 +203,10 @@ def build_context(payload: dict) -> dict:
 
     # Score
     parts = result["score"]["parts"]
+    maxp = result["score"].get("max") or {}
     score_rows = []
     for key, lbl, mx in SCORE_PARTS[ac]:
+        mx = maxp.get(key, mx)
         pts = parts.get(key, 0) or 0
         score_rows.append({"label": lbl, "points": f"{pts:g}", "max": mx, "pct": max(0, min(100, round(pts / mx * 100)))})
 
@@ -230,7 +241,41 @@ def build_context(payload: dict) -> dict:
     gaps = [code_label(code_of(d)) for d in gate.get("dataGaps", [])]
     answers = [a for a in (engine.get("answers") or []) if isinstance(a, dict) and a.get("question")]
 
+    def per(x):
+        return "—" if x is None else f"EUR {x:.2f} / m² / month"
+    lease_rows, asset_rows = [], []
+    if v:
+        rent = v.get("rent") or {}
+        lease_rows = [("Passing rent", per(rent.get("passingPm2"))),
+                      ("Market rent used (ERV)", per(rent.get("ervUsedPm2"))),
+                      ("Prime rent benchmark", per(rent.get("primeRentPm2")) + " (broker research)" if rent.get("primeRentPm2") else "no benchmark for this segment"),
+                      ("Occupancy", pct(inp["occupancy"], 0)),
+                      ("Remaining term to first break", f"{inp.get('waultYears', 0):g} years"),
+                      ("Indexation (p.a.)", pct(inp.get("indexation"), 1)),
+                      ("Renewal probability (model)", pct(v.get("renewalProb"), 0))]
+        if ac == "COM":
+            com = inp.get("com") or {}
+            lease_rows += [("Tenant covenant", com.get("tenantCovenant") or "not provided"),
+                           ("Largest tenant share", pct(com.get("largestTenantShare"), 0) if com.get("largestTenantShare") is not None else "not provided")]
+    unit = lambda x, u: "not provided" if x is None else f"{x:g}{u}"
+    yn = lambda b: "not provided" if b is None else ("yes" if b else "no")
+    risk = inp.get("risk") or {}
+    asset_rows = [("Construction year", str(risk.get("constructionYear") or "not provided")), ("Seismic class", str(risk.get("seismic") or "unknown").upper())]
+    if ac == "IND":
+        i = inp.get("ind") or {}
+        asset_rows += [("Clear height", unit(i.get("clearHeightM"), " m")), ("Floor load", unit(i.get("floorLoadTm2"), " t/m²")),
+                       ("Docks per 1,000 m²", unit(i.get("docksPer1000"), "")), ("Yard depth", unit(i.get("yardDepthM"), " m")),
+                       ("Power capacity", unit(i.get("powerMW"), " MW")), ("ESFR sprinklers", yn(i.get("esfr"))),
+                       ("Rail siding", yn(i.get("railSiding"))), ("Expansion land", yn(i.get("expansionLand")))]
+    else:
+        c = inp.get("com") or {}
+        asset_rows += [("Certification", (c.get("certification") or "not provided").replace("_", " ")), ("Energy class", c.get("energyClass") or "not provided"),
+                       ("Green capex budget", eur(inp.get("costs", {}).get("greenCapex")) if (inp.get("costs", {}).get("greenCapex") or 0) > 0 else "none stated")]
+
     ctx = {
+        "lease_rows": [{"label": a, "value": b} for a, b in lease_rows],
+        "asset_rows": [{"label": a, "value": b} for a, b in asset_rows],
+        "evidence": engine.get("marketEvidence") or [],
         "title": f"{ASSET[ac]} · {city}" if city else ASSET[ac],
         "asset_label": ASSET[ac],
         "client_name": contact.get("name") or "Client",
@@ -283,33 +328,68 @@ def build_context(payload: dict) -> dict:
         else:
             if "transitStopsWithin1km" in loc: auto.append(("Bus/tram stops ≤ 1 km", str(loc["transitStopsWithin1km"])))
             if loc: auto.append(("Nearest metro", f"{loc['nearestMetroM']} m" if loc.get("nearestMetroM") is not None else "none within 2 km"))
+    if enr.get("status") == "done":
+        # GRID v3.3: Hinweise ohne Einfluss auf das Ergebnis (Natura 2000, Erdbeben nach P100-1/2013)
+        n2k = enr.get("protectedAreas")
+        if n2k is not None:
+            sites = lambda arr: "; ".join(f"{x['code']} {x['name']}" for x in arr[:2]) + (f" (+{len(arr) - 2})" if len(arr) > 2 else "")
+            if n2k.get("inside"):
+                auto.append(("Natura 2000 (EEA)", "inside: " + sites(n2k["inside"])))
+            elif n2k.get("nearby"):
+                auto.append(("Natura 2000 (EEA)", f"within {n2k.get('nearbyWithinKm', 2):g} km: " + sites(n2k["nearby"])))
+            else:
+                auto.append(("Natura 2000 (EEA)", f"none within {n2k.get('nearbyWithinKm', 2):g} km"))
+        sz = enr.get("seismic")
+        if sz:
+            fx = lambda x, u: f"{x:.2f}" if u == "g" else f"{x:.1f}"
+            rng = lambda r, u: "–" if not r else (f"{fx(r[0], u)} {u}" if r[0] == r[1] else f"{fx(r[0], u)}–{fx(r[1], u)} {u}")
+            near = sz.get("nearest") or {}
+            auto.append((f"Seismic ag / TC ({sz.get('code', 'P100-1')}, indicative)",
+                         f"{rng(sz.get('agRangeG'), 'g')} / {rng(sz.get('tcRangeS'), 's')} · nearest listed town {near.get('town', '?')} ({near.get('km', '?')} km)"))
     ctx["auto_rows"] = [{"label": a, "value": b} for a, b in auto]
-    SRC = {"osm_overpass": "OpenStreetMap (Overpass)", "openrouteservice": "openrouteservice (HGV routing)",
-           "eu_jrc_pvgis": "EU JRC PVGIS", "world_bank": "World Bank Open Data"}
+    SRC = {"osm_overpass": "OpenStreetMap (Overpass)", "osm_local": "OpenStreetMap (GRID extract, monthly)",
+           "openrouteservice": "openrouteservice (HGV routing)", "eu_jrc_pvgis": "EU JRC PVGIS", "world_bank": "World Bank Open Data",
+           "eea_natura2000": "EEA Natura 2000 sites", "p100_seismic": "Seismic design code P100-1/2013, Table A1"}
     STATUS = {"ok": "ok", "partial": "partial", "not_configured": "not configured", "not_applicable": "n/a",
-              "unavailable": "no response", "error": "error", "skipped": "skipped", "no_route": "no route"}
+              "unavailable": "no response", "error": "error", "skipped": "skipped", "no_route": "no route",
+              "out_of_range": "no listed town nearby", "not_available": "not available"}
     ctx["source_rows"] = [{"label": SRC.get(k, k), "status": STATUS.get(v.get("status"), v.get("status"))} for k, v in (enr.get("sources") or {}).items()]
     ctx["retrieved_at"] = (enr.get("fetchedAt") or "")[:16].replace("T", " ") + (" UTC" if enr.get("fetchedAt") else "")
     ctx["provenance_count"] = len(prov)
 
     if v:
         y = v["yields"]
+        mc = v.get("marketCheck") or {}
+        sig = SIGNAL.get(mc.get("signal"), ("—", "#6E7788"))
+        rng = v.get("marketValueRange") or {}
+        strat = v.get("strategy") or {}
+        ctx["signal"] = {"label": sig[0], "color": sig[1], "ratio": f"{mc['priceToMarket']:.2f}" if mc.get("priceToMarket") is not None else "—",
+                         "text": engine.get("marketSignalLabel") or ""}
         ctx["k"] = {
             "asking": eur(inp["price"]), "asking_m2": eur(v["pricePerM2"]),
             "market_value": eur(v["vMarket"]), "has_comp": v.get("vComp") is not None,
+            "range": f"{eur(rng.get('low'))} – {eur(rng.get('high'))}" if rng else "—",
+            "strategy": STRATEGY.get(strat.get("key"), strat.get("key") or "—") + ("" if strat.get("fromClient") else " (default)"),
             "mao": eur(v["mao"]), "mao_m2": eur(v["maoPerM2"]),
             "niy": pct(v["netInitialYield"]), "irr": pct(v["irrRiskAdj"]), "target_irr": pct(y["targetIRR"]),
         }
+        pr = y.get("primeRange")
         ctx["y"] = {"prime": pct(y["prime"]), "adjusted": pct(y["adjusted"]), "exit": pct(y["exit"]),
                     "discount": pct(y["discountMarket"]), "target": pct(y["targetIRR"]),
-                    "source": "Prime yield from broker research (see methodology); adjusted for the location score."}
+                    "prime_range": f"{pct(pr[0])} – {pct(pr[1])}" if pr and pr[0] != pr[1] else None,
+                    "source": "Prime yield from broker research (CBRE, Cushman & Wakefield); adjusted for the location score. The discount rate is calibrated to the market yield."}
         ctx["cf"] = {"rows": [{"year": f"{r['year']} ({r['calendarYear']})", "rent": num(r["rent"]), "noi": num(r["noi"]),
                                "leasing": num(r["leasing"]), "cf": num(r["cf"])} for r in v["cashflows"]],
                      "exit": num(v["exitValue"])}
         ctx["val"] = {"income": eur(v["vIncome"]), "comp": eur(v.get("vComp")), "market": eur(v["vMarket"]), "jp": eur(v["jp"]),
                       "mao": eur(v["mao"]), "ratio": f"{v['priceToMao']:.2f}" if v.get("priceToMao") else "—",
-                      "irr_cash": pct(v["irrCash"]), "irr_risk": pct(v["irrRiskAdj"]),
-                      "alpha": f"{eur(v['negotiationRange']['amount'])} ({pct(v['negotiationRange']['alpha'], 1)})",
+                      "irr_cash": pct(v["irrCash"], 1), "irr_risk": pct(v["irrRiskAdj"], 1),
+                      "range": f"{eur(rng.get('low'))} – {eur(rng.get('high'))}" if rng else "—",
+                      "band": f"±{round((rng.get('yieldBand') or 0) * 10000)} bp",
+                      "price_market": f"{mc['priceToMarket']:.2f}" if mc.get("priceToMarket") is not None else "—",
+                      "strategy": f"{STRATEGY.get(strat.get('key'), strat.get('key'))} (+{pct(strat.get('targetPremium'), 1)})" if strat else "—",
+                      "jp_basis": f"TRI above {v.get('triBaseline')} (excess {v.get('triExcess')})",
+                      "calibrated": "yes" if (v.get("yields") or {}).get("calibrated") else "no — result capped at Caution",
                       "gri_shift": f"{round(v.get('griExitYieldShiftDownside', 0) * 10000)} bp"}
         s = v["scenarios"]
         ctx["scen"] = [{"name": n, "mao": eur(s[k]["mao"]), "irr": pct(s[k]["irrRiskAdj"]), "exit": eur(s[k]["exitValue"])}
@@ -317,8 +397,9 @@ def build_context(payload: dict) -> dict:
     else:
         na = "—"
         ctx["k"] = {"asking": eur(inp["price"]), "asking_m2": na, "market_value": na, "has_comp": False, "mao": "VETO",
-                    "mao_m2": na, "niy": na, "irr": na, "target_irr": na}
-        ctx["y"] = {"prime": na, "adjusted": na, "exit": na, "discount": na, "target": na, "source": ""}
+                    "mao_m2": na, "niy": na, "irr": na, "target_irr": na, "range": na, "strategy": na}
+        ctx["signal"] = None
+        ctx["y"] = {"prime": na, "adjusted": na, "exit": na, "discount": na, "target": na, "source": "", "prime_range": None}
         ctx["cf"] = None
         ctx["val"] = {}
         ctx["scen"] = []

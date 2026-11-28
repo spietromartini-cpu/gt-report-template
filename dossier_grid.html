@@ -4,46 +4,76 @@
 <meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  /* GRID-Dossier · Design aus investment_report_en.html (GT Global Estates & Capital), Farbwelt Bordeaux */
+  /* GRID-Dossier · Design aus investment_report_en.html (GT Global Estates & Capital), helles Druckdesign Navy & Gold (27.11.2026) */
   @page { size: A4; margin: 0mm; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Montserrat', sans-serif; background-color: #290E14; color: #F5F5F0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .page      { width: 210mm; height: 296mm; background-color: #290E14; position: relative; page-break-after: always; padding: 48px 48px 70px 48px; overflow: hidden; }
-  .page-dark { background-color: #1F0B0F; }
-  .divider  { width: 100%; height: 1px; background: #B7791F; opacity: 0.35; margin: 22px 0; }
+  body { font-family: 'Montserrat', sans-serif; background-color: #F7F5F0; color: #1B2A44; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page      { width: 210mm; height: 296mm; background-color: #F7F5F0; position: relative; page-break-after: always; padding: 48px 48px 70px 48px; overflow: hidden; }
+  .page-dark { background-color: #FFFFFF; }
+  .divider  { width: 100%; height: 1px; background: #B7954E; opacity: 0.35; margin: 22px 0; }
   .two-col  { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-  .col-label { font-size: 6.5pt; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #B7791F; margin-bottom: 11px; }
-  .eyebrow   { font-size: 6.5pt; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #B7791F; margin-bottom: 10px; }
+  .col-label { font-size: 6.5pt; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #8A6A2E; margin-bottom: 11px; }
+  .eyebrow   { font-size: 6.5pt; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #8A6A2E; margin-bottom: 10px; }
   .h-page    { font-family: 'Cormorant Garamond', serif; font-size: 26pt; font-weight: 300; line-height: 1.1; }
-  .h-page em { color: #B7791F; font-style: italic; }
-  .body-text   { font-size: 8pt; font-weight: 300; color: rgba(245,245,240,0.85); line-height: 1.8; }
+  .h-page em { color: #8A6A2E; font-style: italic; }
+  .body-text   { font-size: 8pt; font-weight: 300; color: #1B2A44; line-height: 1.8; }
   .body-text p + p { margin-top: 9px; }
-  .serif-text  { font-family: 'Cormorant Garamond', serif; font-size: 11pt; font-style: italic; color: rgba(245,245,240,0.9); line-height: 1.55; }
+  .serif-text  { font-family: 'Cormorant Garamond', serif; font-size: 11pt; font-style: italic; color: #1B2A44; line-height: 1.55; }
   .serif-text p + p { margin-top: 14px; }
-  .muted { color: #A2948B; }
-  .gold  { color: #B7791F; }
+  .muted { color: #6E7788; }
+  .gold  { color: #8A6A2E; }
   .data-table { width: 100%; border-collapse: collapse; }
-  .data-table td { padding: 7px 0; border-bottom: 1px solid rgba(183,121,31,0.12); font-size: 7.6pt; vertical-align: top; }
-  .data-table td:first-child { color: #B7791F; font-weight: 600; text-transform: uppercase; font-size: 6.3pt; letter-spacing: 0.08em; padding-right: 8px; }
-  .data-table td:last-child  { text-align: right; color: #F5F5F0; }
+  .data-table td { padding: 7px 0; border-bottom: 1px solid rgba(183,149,78,.12); font-size: 7.6pt; vertical-align: top; }
+  .data-table td:first-child { color: #8A6A2E; font-weight: 600; text-transform: uppercase; font-size: 6.3pt; letter-spacing: 0.08em; padding-right: 8px; }
+  .data-table td:last-child  { text-align: right; color: #1B2A44; }
   .grid-table { width: 100%; border-collapse: collapse; font-size: 7pt; }
-  .grid-table th { text-align: right; font-size: 5.8pt; letter-spacing: 0.14em; text-transform: uppercase; color: #B7791F; font-weight: 700; padding: 6px 4px; border-bottom: 1px solid rgba(183,121,31,0.35); }
+  .grid-table th { text-align: right; font-size: 5.8pt; letter-spacing: 0.14em; text-transform: uppercase; color: #8A6A2E; font-weight: 700; padding: 6px 4px; border-bottom: 1px solid rgba(183,149,78,.35); }
   .grid-table th:first-child, .grid-table td:first-child { text-align: left; }
-  .grid-table td { text-align: right; padding: 5px 4px; border-bottom: 1px solid rgba(183,121,31,0.10); color: rgba(245,245,240,0.9); }
-  .grid-table tr.total td { border-top: 1px solid rgba(183,121,31,0.45); color: #B7791F; font-weight: 600; }
-  .card      { background: rgba(41,14,20,0.6); border: 1px solid rgba(183,121,31,0.2); padding: 20px; }
-  .card-sm   { background: rgba(41,14,20,0.4); border: 1px solid rgba(183,121,31,0.15); padding: 15px; }
+  .grid-table td { text-align: right; padding: 5px 4px; border-bottom: 1px solid rgba(183,149,78,.1); color: #1B2A44; }
+  .grid-table tr.total td { border-top: 1px solid rgba(183,149,78,.45); color: #8A6A2E; font-weight: 600; }
+  .card      { background: rgba(255,255,255,.6); border: 1px solid rgba(183,149,78,.2); padding: 20px; }
+  .card-sm   { background: rgba(255,255,255,.4); border: 1px solid rgba(183,149,78,.15); padding: 15px; }
   .num-xl    { font-family: 'Cormorant Garamond', serif; font-size: 27pt; line-height: 1.05; }
   .num-md    { font-family: 'Cormorant Garamond', serif; font-size: 15pt; line-height: 1.1; }
   .badge        { display: inline-block; padding: 4px 10px; font-weight: 700; border-radius: 2px; text-transform: uppercase; font-size: 6pt; letter-spacing: 0.14em; }
-  .badge-ok     { background: rgba(74,222,128,0.1);  color: #4ADE80; border: 1px solid rgba(74,222,128,0.3); }
-  .badge-warn   { background: rgba(251,191,36,0.1);  color: #FBB324; border: 1px solid rgba(251,191,36,0.3); }
-  .badge-alert  { background: rgba(248,113,113,0.1); color: #F87171; border: 1px solid rgba(248,113,113,0.3); }
-  .badge-muted  { background: rgba(162,148,139,0.08); color: #A2948B; border: 1px solid rgba(162,148,139,0.3); }
-  .bar     { height: 4px; background: rgba(183,121,31,0.15); margin-top: 4px; }
-  .bar > i { display: block; height: 4px; background: #B7791F; }
-  .note    { font-size: 6.4pt; color: #A2948B; line-height: 1.6; }
-  .footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 48px; border-top: 1px solid rgba(183,121,31,0.15); display: flex; justify-content: space-between; font-size: 6.5pt; color: #A2948B; text-transform: uppercase; letter-spacing: 0.2em; background: rgba(22,9,12,0.6); }
+  .badge-ok     { background: rgba(21,128,61,.1);  color: #15803D; border: 1px solid rgba(21,128,61,.3); }
+  .badge-warn   { background: rgba(180,83,9,.1);  color: #B45309; border: 1px solid rgba(180,83,9,.3); }
+  .badge-alert  { background: rgba(185,28,28,.1); color: #B91C1C; border: 1px solid rgba(185,28,28,.3); }
+  .badge-muted  { background: rgba(27,42,68,.08); color: #6E7788; border: 1px solid rgba(27,42,68,.3); }
+  .bar     { height: 4px; background: rgba(183,149,78,.15); margin-top: 4px; }
+  .bar > i { display: block; height: 4px; background: #B7954E; }
+  .note    { font-size: 6.4pt; color: #6E7788; line-height: 1.6; }
+  .footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 48px; border-top: 1px solid rgba(183,149,78,.15); display: flex; justify-content: space-between; font-size: 6.5pt; color: #6E7788; text-transform: uppercase; letter-spacing: 0.2em; background: rgba(255,255,255,.6); }
+
+  /* ── Light print design · Navy & Gold (27.11.2026) ── */
+  body { background:#FFFFFF !important; color:#1B2A44 !important; }
+  .page, .page-dark { background:#FFFFFF !important; color:#1B2A44; padding:58px 54px 78px 54px; }
+  .page::before { content:""; position:absolute; top:7mm; left:7mm; right:7mm; bottom:7mm; border:0.8pt solid #1B2A44; }
+  .page::after  { content:""; position:absolute; top:7mm; left:7mm; right:7mm; height:3.2pt; background:#1B2A44; }
+  .divider  { background:#B7954E !important; opacity:0.7 !important; }
+  .col-label, .eyebrow { color:#8A6A2E !important; }
+  .h-page { color:#1B2A44; }
+  .h-page em, .gold { color:#9C7A3C !important; }
+  .body-text { color:#2C3B57 !important; font-weight:400 !important; }
+  .serif-text { color:#1B2A44 !important; }
+  .muted, .note { color:#5B6577 !important; }
+  .data-table td { border-bottom:0.6pt solid #E2DDD2 !important; }
+  .data-table td:first-child { color:#8A6A2E !important; }
+  .data-table td:last-child { color:#1B2A44 !important; }
+  .grid-table th { color:#1B2A44 !important; border-bottom:0.9pt solid #1B2A44 !important; }
+  .grid-table td { color:#1B2A44 !important; border-bottom:0.5pt solid #ECE8DF !important; }
+  .grid-table tr.total td { border-top:0.9pt solid #1B2A44 !important; color:#1B2A44 !important; font-weight:700; }
+  .card    { background:#FFFFFF !important; border:0.8pt solid #1B2A44 !important; }
+  .card-sm { background:#FAF8F4 !important; border:0.6pt solid #D9D3C7 !important; }
+  .badge-ok    { background:#EAF5EE !important; color:#15803D !important; border:0.6pt solid #15803D !important; }
+  .badge-warn  { background:#FBF1E6 !important; color:#B45309 !important; border:0.6pt solid #B45309 !important; }
+  .badge-alert { background:#FBECEC !important; color:#B91C1C !important; border:0.6pt solid #B91C1C !important; }
+  .badge-muted { background:#F3F1EC !important; color:#5B6577 !important; border:0.6pt solid #C9C3B7 !important; }
+  .bar { background:#ECE8DF !important; }
+  .bar > i { background:#1B2A44 !important; }
+  .footer { left:7mm !important; right:7mm !important; bottom:7mm !important; padding:11px 22px !important; border-top:0.6pt solid #1B2A44 !important; color:#5B6577 !important; }
+  .monogram { display:inline-block; border:0.9pt solid #1B2A44; padding:10px 14px 8px; text-align:center; }
+  .monogram b { font-family:'Cormorant Garamond',serif; font-weight:400; font-size:24pt; color:#B7954E; letter-spacing:0.02em; }
 </style>
 </head>
 <body>
@@ -51,19 +81,19 @@
 {# ═════════ PAGE 1 — COVER ═════════ #}
 <div class="page">
   <div style="display:flex; justify-content:space-between;">
-    <div style="font-size:6.5pt; font-weight:700; color:#B7791F; letter-spacing:0.3em;">GRID &middot; GEOSPATIAL RISK &amp; INVESTMENT DECISIONING</div>
+    <div style="font-size:6.5pt; font-weight:700; color:#8A6A2E; letter-spacing:0.3em;">GRID &middot; GEOSPATIAL RISK &amp; INVESTMENT DECISIONING</div>
     <div style="text-align:right;">
-      <span style="font-family:'Cormorant Garamond',serif; font-size:26pt; font-weight:300; color:#B7791F;">G&amp;T</span><br>
-      <span style="font-size:5.5pt; color:#A2948B; letter-spacing:0.25em;">GLOBAL ESTATES &amp; CAPITAL</span>
+      <span class="monogram"><b>G&amp;T</b></span><br>
+      <span style="font-size:5.5pt; color:#6E7788; letter-spacing:0.25em;">GLOBAL ESTATES &amp; CAPITAL</span>
     </div>
   </div>
   <div style="margin-top:160px;">
-    <h1 style="font-family:'Cormorant Garamond',serif; font-size:48pt; font-weight:300; line-height:0.95;">GT GLOBAL<br><span style="color:#B7791F; font-style:italic;">ESTATES</span></h1>
-    <div style="width:70px; height:1px; background:#B7791F; margin:35px 0;"></div>
+    <h1 style="font-family:'Cormorant Garamond',serif; font-size:48pt; font-weight:300; line-height:0.95;">GT GLOBAL<br><span style="color:#8A6A2E; font-style:italic;">ESTATES</span></h1>
+    <div style="width:70px; height:1px; background:#B7954E; margin:35px 0;"></div>
     <h2 style="font-family:'Cormorant Garamond',serif; font-size:30pt; font-weight:300; margin-bottom:22px;">{{ title }}</h2>
-    <div style="font-size:8.5pt; font-weight:300; color:rgba(245,245,240,0.6); margin-bottom:45px; letter-spacing:0.05em;">GRID Dossier &middot; {{ asset_label }} &middot; GRID Value Model</div>
-    <div style="font-size:6.5pt; letter-spacing:0.25em; text-transform:uppercase; color:#A2948B; margin-bottom:10px;">Prepared Exclusively For</div>
-    <div style="font-family:'Cormorant Garamond',serif; font-size:22pt; color:#B7791F;">{{ client_name }}</div>
+    <div style="font-size:8.5pt; font-weight:300; color:rgba(27,42,68,.9); margin-bottom:45px; letter-spacing:0.05em;">GRID Dossier &middot; {{ asset_label }} &middot; GRID Value Model</div>
+    <div style="font-size:6.5pt; letter-spacing:0.25em; text-transform:uppercase; color:#6E7788; margin-bottom:10px;">Prepared Exclusively For</div>
+    <div style="font-family:'Cormorant Garamond',serif; font-size:22pt; color:#8A6A2E;">{{ client_name }}</div>
   </div>
   <div class="footer"><span>GT Global Estates &amp; Capital &middot; GRID Engine</span><span>{{ date }} &middot; Ref. {{ ref }}</span></div>
 </div>
@@ -73,18 +103,23 @@
   <div style="display:flex; justify-content:space-between; align-items:flex-start;">
     <div>
       <div class="eyebrow">Executive Summary</div>
-      <h2 style="font-family:'Cormorant Garamond',serif; font-size:34pt; font-weight:300; line-height:1.05;">Strategic Market<br><span style="color:#B7791F; font-style:italic;">Intelligence</span></h2>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-size:34pt; font-weight:300; line-height:1.05;">Strategic Market<br><span style="color:#8A6A2E; font-style:italic;">Intelligence</span></h2>
     </div>
-    <div style="text-align:center; border:2px solid {{ verdict.color }}; border-radius:2px; padding:16px 18px; min-width:190px; max-width:230px; background:rgba(41,14,20,0.8);">
-      <div style="font-size:6.5pt; font-weight:700; color:#A2948B; letter-spacing:0.2em; margin-bottom:8px;">RECOMMENDATION</div>
+    <div style="text-align:center; border:2px solid {{ verdict.color }}; border-radius:2px; padding:16px 18px; min-width:190px; max-width:230px; background:rgba(255,255,255,.8);">
+      <div style="font-size:6.5pt; font-weight:700; color:#6E7788; letter-spacing:0.2em; margin-bottom:8px;">VERDICT &middot; TARGET RETURN</div>
       <div style="font-family:'Cormorant Garamond',serif; font-size:{{ verdict.size }}; line-height:1; margin-bottom:6px; color:{{ verdict.color }};">{{ verdict.label }}</div>
-      <div style="font-size:5.5pt; font-weight:600; text-transform:uppercase; opacity:0.8; letter-spacing:0.1em;">Verified by the GRID Engine</div>
+      <div style="font-size:5.5pt; font-weight:600; text-transform:uppercase; opacity:0.8; letter-spacing:0.1em;">Computed by the GRID Engine &middot; {{ k.strategy }}</div>
+      {% if signal %}<div style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(183,149,78,.3);">
+        <div style="font-size:6pt; font-weight:700; color:#6E7788; letter-spacing:0.2em; margin-bottom:4px;">PRICE VS. MARKET VALUE</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:14pt; color:{{ signal.color }};">{{ signal.label }}</div>
+        <div style="font-size:5.5pt; color:#6E7788;">price / market value {{ signal.ratio }}</div>
+      </div>{% endif %}
     </div>
   </div>
   <div class="divider"></div>
   <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;">
     <div class="card"><div class="col-label">Asking Price</div><div class="num-xl">{{ k.asking }}</div><div class="note" style="margin-top:6px;">{{ k.asking_m2 }} / m²</div></div>
-    <div class="card"><div class="col-label">Market Value Indication</div><div class="num-xl">{{ k.market_value }}</div><div class="note" style="margin-top:6px;">Income approach{{ ', reconciled with comparables' if k.has_comp else '' }}</div></div>
+    <div class="card"><div class="col-label">Market Value Indication</div><div class="num-xl">{{ k.market_value }}</div><div class="note" style="margin-top:6px;">Range {{ k.range }} &middot; income approach{{ ', reconciled with comparables' if k.has_comp else '' }}</div></div>
     <div class="card"><div class="col-label">Maximum Allowable Offer</div><div class="num-xl gold">{{ k.mao }}</div><div class="note" style="margin-top:6px;">{{ k.mao_m2 }} / m² &middot; {{ profile_label }}</div></div>
   </div>
   <div style="margin-top:14px; display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px;">
@@ -101,6 +136,7 @@
   <div class="divider"></div>
   <div class="col-label">Investment Recommendation</div>
   <div class="body-text" style="border-left:2px solid {{ verdict.color }}; padding-left:16px;">{% for p in t.recommendation %}<p>{{ p }}</p>{% endfor %}</div>
+  <div class="note" style="margin-top:14px; border:1px solid rgba(183,149,78,.3); padding:10px 12px;"><span class="gold" style="font-weight:700; letter-spacing:0.12em;">DECISION AID, NOT ADVICE.</span> This dossier supports, but does not replace, your own due diligence and professional advice. It is not a valuation under ANEVAR or RICS standards and not investment, legal or tax advice. Please discuss any purchase decision in a personal consultation with GT Global Estates &amp; Capital.</div>
   <div class="footer"><span>Report for {{ client_name }}</span><span>Page 2</span></div>
 </div>
 
@@ -118,12 +154,17 @@
       <div class="col-label">Yield Architecture</div>
       <table class="data-table">
         <tr><td>Prime yield (market)</td><td>{{ y.prime }}</td></tr>
+        {% if y.prime_range %}<tr><td>Prime yield range (broker research)</td><td>{{ y.prime_range }}</td></tr>{% endif %}
         <tr><td>Asset-adjusted yield</td><td>{{ y.adjusted }}</td></tr>
         <tr><td>Exit yield (year 10)</td><td>{{ y.exit }}</td></tr>
-        <tr><td>Market discount rate</td><td>{{ y.discount }}</td></tr>
-        <tr><td>Target IRR ({{ profile_short }})</td><td>{{ y.target }}</td></tr>
+        <tr><td>Market discount rate (calibrated)</td><td>{{ y.discount }}</td></tr>
+        <tr><td>Target IRR ({{ k.strategy }})</td><td>{{ y.target }}</td></tr>
       </table>
       <div class="note" style="margin-top:8px;">{{ y.source }}</div>
+      {% if evidence %}
+      <div class="col-label" style="margin-top:18px;">Market Evidence</div>
+      <div class="note" style="font-size:6.8pt; line-height:1.65;">{% for e in evidence %}<p style="margin-bottom:4px;">{{ e }}</p>{% endfor %}</div>
+      {% endif %}
       {% if macro_rows or pv_row %}
       <div class="col-label" style="margin-top:18px;">Market &amp; Site Indicators</div>
       <table class="data-table">
@@ -154,7 +195,29 @@
   <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 3</span></div>
 </div>
 
-{# ═════════ PAGE 4 — OWNERSHIP PALIMPSEST ═════════ #}
+
+{# ═════════ PAGE 4 — INCOME, LEASE & ASSET QUALITY (v3.4) ═════════ #}
+<div class="page">
+  <div class="eyebrow">Income Security &amp; Building Quality</div>
+  <h2 class="h-page">Income, Lease <em>&amp; Asset Quality</em></h2>
+  <div class="divider"></div>
+  <div class="two-col">
+    <div>
+      <div class="col-label">Income &amp; Lease Profile</div>
+      <div class="body-text">{% for p in t.income_analysis %}<p>{{ p }}</p>{% endfor %}</div>
+      {% if lease_rows %}<table class="data-table" style="margin-top:14px;">{% for r in lease_rows %}<tr><td>{{ r.label }}</td><td>{{ r.value }}</td></tr>{% endfor %}</table>{% endif %}
+    </div>
+    <div>
+      <div class="col-label">Physical &amp; Functional Quality</div>
+      <div class="body-text">{% for p in t.asset_quality %}<p>{{ p }}</p>{% endfor %}</div>
+      <table class="data-table" style="margin-top:14px;">{% for r in asset_rows %}<tr><td>{{ r.label }}</td><td>{{ r.value }}</td></tr>{% endfor %}</table>
+      <div class="note" style="margin-top:8px;">Physical data as stated by the client unless marked as automated; not verified on site.</div>
+    </div>
+  </div>
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 4</span></div>
+</div>
+
+{# ═════════ PAGE 5 — OWNERSHIP PALIMPSEST ═════════ #}
 <div class="page">
   <div class="eyebrow">History as Land Register</div>
   <h2 class="h-page">Ownership Layers <em>&amp; Value Gap</em></h2>
@@ -175,10 +238,10 @@
       {% endif %}
     </div>
   </div>
-  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 4</span></div>
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 5</span></div>
 </div>
 
-{# ═════════ PAGE 5 — VETO GATE & TRI ═════════ #}
+{# ═════════ PAGE 6 — VETO GATE & TRI ═════════ #}
 <div class="page page-dark">
   <div class="eyebrow">Advanced Risk Assessment</div>
   <h2 class="h-page">Binary Veto Gate <em>&amp; Title Risk Index</em></h2>
@@ -189,10 +252,6 @@
       <table class="data-table">
         {% for g in gate_rows %}<tr><td>{{ g.label }}</td><td><span class="badge {{ g.cls }}">{{ g.status }}</span></td></tr>{% endfor %}
       </table>
-      {% if auto_rows %}<div class="col-label" style="margin-top:18px;">Automated Location Checks</div>
-      <table class="data-table">{% for a in auto_rows %}<tr><td>{{ a.label }}</td><td>{{ a.value }}</td></tr>{% endfor %}</table>{% endif %}
-      {% if flags %}<div class="col-label" style="margin-top:18px;">Advisory Flags</div>
-      <div class="body-text">{% for f in flags %}<p>{{ f }}</p>{% endfor %}</div>{% endif %}
     </div>
     <div>
       <div class="col-label">Title Risk Index &middot; {{ tri.value }} / 10</div>
@@ -201,6 +260,10 @@
         {% for c in tri.rows %}<tr><td>{{ c.label }}</td><td>{{ c.score }}</td><td class="muted">{{ c.weight }}</td></tr>{% endfor %}
       </table>
       <div class="note" style="margin-top:8px;">Profile limit: {{ tri.limit }}. Unknown components are scored as medium risk (3.0) until documents are provided.</div>
+      {% if auto_rows %}<div class="col-label" style="margin-top:18px;">Automated Location Checks</div>
+      <table class="data-table">{% for a in auto_rows %}<tr><td>{{ a.label }}</td><td>{{ a.value }}</td></tr>{% endfor %}</table>{% endif %}
+      {% if flags %}<div class="col-label" style="margin-top:18px;">Advisory Flags</div>
+      <div class="body-text">{% for f in flags %}<p>{{ f }}</p>{% endfor %}</div>{% endif %}
     </div>
   </div>
   <div class="divider"></div>
@@ -208,10 +271,10 @@
   <div class="body-text">{% for p in t.risk_commentary %}<p>{{ p }}</p>{% endfor %}</div>
   {% if gaps %}<div class="col-label" style="margin-top:16px;">Open Due-Diligence Points</div>
   <div class="body-text">{{ gaps | join(' · ') }}</div>{% endif %}
-  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 5</span></div>
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 6</span></div>
 </div>
 
-{# ═════════ PAGE 6 — VALUATION ═════════ #}
+{# ═════════ PAGE 7 — VALUATION ═════════ #}
 <div class="page">
   <div class="eyebrow">Discounted Cash Flow &amp; Value Determination</div>
   <h2 class="h-page">GRID Value Model <em>Valuation</em></h2>
@@ -231,11 +294,15 @@
         <tr><td>Income value</td><td>{{ val.income }}</td></tr>
         <tr><td>Comparable value</td><td>{{ val.comp }}</td></tr>
         <tr><td>Market value indication</td><td>{{ val.market }}</td></tr>
+        <tr><td>Market value range (prime yield {{ val.band }})</td><td>{{ val.range }}</td></tr>
+        <tr><td>Asking price / market value</td><td>{{ val.price_market }}</td></tr>
+        <tr><td>Strategy (target premium)</td><td>{{ val.strategy }}</td></tr>
         <tr><td>Legal risk provision (JP)</td><td>{{ val.jp }}</td></tr>
+        <tr><td>JP basis</td><td>{{ val.jp_basis }}</td></tr>
         <tr><td>Maximum allowable offer</td><td class="gold">{{ val.mao }}</td></tr>
         <tr><td>Asking price / MAO</td><td>{{ val.ratio }}</td></tr>
         <tr><td>IRR at asking (cash / risk-adj.)</td><td>{{ val.irr_cash }} / {{ val.irr_risk }}</td></tr>
-        <tr><td>Information alpha (negotiation room)</td><td>{{ val.alpha }}</td></tr>
+        <tr><td>Yields calibrated for location &amp; segment</td><td>{{ val.calibrated }}</td></tr>
       </table>
     </div>
     <div>
@@ -244,13 +311,13 @@
         <tr><th>Scenario</th><th>MAO</th><th>IRR risk-adj.</th><th>Exit value</th></tr>
         {% for s in scen %}<tr><td>{{ s.name }}</td><td>{{ s.mao }}</td><td>{{ s.irr }}</td><td>{{ s.exit }}</td></tr>{% endfor %}
       </table>
-      <div class="note" style="margin-top:10px;">Downside: market rent −10 %, renewal probability −15 pp, exit yield +{{ val.gri_shift }} from geopolitical conflict and exit-liquidity risk. Upside: market rent +5 %, exit yield −25 bp. Unlevered, before investor-level taxes.</div>
+      <div class="note" style="margin-top:10px;">Downside: market rent −10 %, renewal probability −15 pp, exit yield +{{ val.gri_shift }} from geopolitical conflict and exit-liquidity risk. Upside: market rent +5 %, exit yield −25 bp. Unlevered, before investor-level taxes. Values rounded to EUR 10,000.</div>
     </div>
   </div>
   {% else %}
-  <div class="body-text"><p>No valuation was calculated because a binary veto criterion applies. See page 5.</p></div>
+  <div class="body-text"><p>No valuation was calculated because a binary veto criterion applies. See page 6.</p></div>
   {% endif %}
-  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 6</span></div>
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 7</span></div>
 </div>
 
 {# ═════════ PAGE 7 — EXECUTIVE NARRATIVE ═════════ #}
@@ -260,10 +327,10 @@
   <div class="divider"></div>
   <div class="serif-text">{% for p in t.narrative %}<p>{{ p }}</p>{% endfor %}</div>
   <div style="margin-top:22px; text-align:right;">
-    <div style="font-family:'Cormorant Garamond',serif; font-size:16pt; font-style:italic; color:#B7791F;">Pietro Martini</div>
-    <div style="font-size:5.5pt; letter-spacing:0.2em; color:#A2948B;">FOUNDER &amp; CEO &middot; GT GLOBAL ESTATES</div>
+    <div style="font-family:'Cormorant Garamond',serif; font-size:16pt; font-style:italic; color:#8A6A2E;">Pietro Martini</div>
+    <div style="font-size:5.5pt; letter-spacing:0.2em; color:#6E7788;">FOUNDER &amp; CEO &middot; GT GLOBAL ESTATES</div>
   </div>
-  <div class="footer"><span>{{ title }}</span><span>Page 7</span></div>
+  <div class="footer"><span>{{ title }}</span><span>Page 8</span></div>
 </div>
 
 {# ═════════ PAGE 8 — METHODOLOGY & DISCLAIMER ═════════ #}
@@ -275,11 +342,11 @@
     <div>
       <div class="col-label">Methodological Foundation</div>
       <div class="body-text">
-        <p>This dossier applies the GRID Value Model (GRID = Geospatial Risk &amp; Investment Decisioning), developed by Pietro Martini (GT Global Estates &amp; Capital) on the basis of the treatise From the Rubble and computed by the GRID Engine. The decision logic is TRI, VETO and MAO. A binary veto gate is checked first; if a knock-out criterion applies, no value is calculated. Otherwise the engine projects ten years of expected cash flows, including re-letting risk, and capitalises an exit value. Market value is the reconciled income and comparable value. The maximum allowable offer is the highest price at which the profile's target return is still reached after a legal risk provision derived from the Title Risk Index.</p>
-        <p>Location quality is not added as a surcharge; it moves yields and re-letting probability. Information advantages are shown as negotiation room, not as value. Geopolitical risk enters only the downside scenario, because market yields already contain country risk.</p>
+        <p>This dossier applies the GRID Value Model (GRID = Geospatial Risk &amp; Investment Decisioning), developed by Pietro Martini (GT Global Estates &amp; Capital) on the basis of the treatise From the Rubble and computed by the GRID Engine. The decision logic is TRI, VETO and MAO. A binary veto gate is checked first; if a knock-out criterion applies, no value is calculated. Otherwise the engine projects ten years of expected cash flows, including re-letting risk, and capitalises an exit value.</p>
+        <p>The discount rate is calibrated so that the same asset, fully let at market rent with a market-typical lease, is worth its net operating income divided by the market yield; the market value indication therefore follows broker yield evidence and differs only where this asset's income differs. Market rent is capped at the prime rent in broker research. The maximum allowable offer is the highest price, including purchaser's costs, at which the target return of the stated strategy is still reached after a legal risk provision for title risk above the market-normal level. Location quality moves yields and re-letting probability; geopolitical risk enters only the downside scenario.</p>
       </div>
-      <div class="col-label" style="margin-top:16px;">Limitation of Liability</div>
-      <div class="body-text"><p>Automated preliminary assessment based on information provided by the client and on public market data at the date of preparation. It is not a valuation under ANEVAR or RICS standards, not a legal or tax opinion and not investment advice. All legal, cadastral, technical and tax points must be verified by qualified local professionals before any binding offer.</p></div>
+      <div class="col-label" style="margin-top:16px;">Decision Aid &amp; Limitation of Liability</div>
+      <div class="body-text"><p>This dossier is a decision aid based on information provided by the client and on public market data at the date of preparation. It is not a valuation under ANEVAR or RICS standards, not a legal or tax opinion and not investment advice, and it does not replace due diligence. All legal, cadastral, technical and tax points must be verified by qualified local professionals before any binding offer. To the extent permitted by law, GT Global Estates &amp; Capital accepts no liability for decisions based solely on this dossier. A purchase decision should be taken only after your own in-depth review and a personal consultation.</p></div>
       <div class="col-label" style="margin-top:16px;">Confidentiality</div>
       <div class="body-text"><p>This document is confidential and intended solely for {{ client_name }}. Redistribution without written authorisation from GT Global Estates &amp; Capital is prohibited.</p></div>
     </div>
@@ -301,7 +368,7 @@
       <div class="note" style="margin-top:10px;">{{ engine_version }} &middot; parameters {{ params_version }} &middot; analysis of {{ analysis_date }}, dossier of {{ date }}. Status “market” = broker research; “manuscript” = taken from From the Rubble v3.0, not yet calibrated; “assumption” = model default.</div>
     </div>
   </div>
-  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 8</span></div>
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 9</span></div>
 </div>
 
 {# ═════════ PAGE 9 — CLIENT STATEMENTS ═════════ #}
@@ -315,7 +382,7 @@
     {% for a in answers %}<tr><td style="width:46%;">{{ a.question }}</td><td style="text-align:left; padding-left:10px;">{{ a.answer }}</td></tr>{% endfor %}
   </table>
   {% if answers_more %}<div class="note" style="margin-top:8px;">+ {{ answers_more }} further answers, available on request.</div>{% endif %}
-  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 9</span></div>
+  <div class="footer"><span>GT Global Estates &amp; Capital</span><span>Page 10</span></div>
 </div>
 {% endif %}
 
